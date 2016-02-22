@@ -8,6 +8,7 @@ import android.widget.BaseAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.bumptech.glide.Glide;
 import com.iceoton.canomcake.R;
 import com.iceoton.canomcake.model.Category;
 
@@ -23,8 +24,8 @@ public class CategoryListAdapter extends BaseAdapter {
     }
 
     static class ViewHolder {
-        public TextView text;
-        public ImageView image;
+        public TextView textCategoryName;
+        public ImageView imageViewCategory;
     }
 
     @Override
@@ -50,13 +51,18 @@ public class CategoryListAdapter extends BaseAdapter {
             LayoutInflater inflater = (LayoutInflater) mContext.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
             convertView = inflater.inflate(R.layout.category_list_item, parent, false);
             viewHolder = new ViewHolder();
-            viewHolder.image = (ImageView) convertView.findViewById(R.id.image_category);
-
+            viewHolder.imageViewCategory = (ImageView) convertView.findViewById(R.id.image_category);
+            viewHolder.textCategoryName = (TextView)convertView.findViewById(R.id.text_name);
             convertView.setTag(viewHolder);
         } else {
             viewHolder = (ViewHolder)convertView.getTag();
-
         }
+
+        viewHolder.textCategoryName.setText(categories.get(position).getNameThai());
+
+        String imageUrl = mContext.getResources().getString(R.string.api_url)
+                + categories.get(position).getImageUrl();
+        Glide.with(mContext).load(imageUrl).into(viewHolder.imageViewCategory);
 
         return convertView;
     }

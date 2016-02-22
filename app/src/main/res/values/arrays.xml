@@ -2,6 +2,6 @@
 <resources>
     <string-array name="menu_title">
         <item>Product</item>
-        <item>Profile</item>
+        <item>Account</item>
     </string-array>
 </resources>

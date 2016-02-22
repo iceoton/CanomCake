@@ -2,13 +2,36 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical">
+    android:orientation="vertical"
+    android:padding="8dp">
 
-    <ImageView
-        android:id="@+id/image_category"
+    <FrameLayout
         android:layout_width="match_parent"
-        android:layout_height="154dp"
-        android:scaleType="centerCrop"
-        android:src="@drawable/test_category"/>
+        android:layout_height="wrap_content"
+        android:background="@drawable/card_background"
+        android:padding="8dp">
+
+        <ImageView
+            android:id="@+id/image_category"
+            android:layout_width="match_parent"
+            android:layout_height="154dp"
+            android:contentDescription="@null"
+            android:scaleType="centerCrop"
+            android:src="@drawable/default_category_image" />
+
+        <TextView
+            android:id="@+id/text_name"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="bottom|center"
+            android:background="#c6727272"
+            android:gravity="center"
+            android:padding="8dp"
+            android:text="ชื่อหมวดหมู่สินค้า"
+            android:textColor="@color/white"
+            android:textSize="26sp"
+            android:textStyle="bold" />
+
+    </FrameLayout>
 
 </LinearLayout>

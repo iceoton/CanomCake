@@ -1,3 +1,4 @@
 <resources>
+    <string name="api_url">http://188.166.218.45/</string>
     <string name="app_name">Canom Cake</string>
 </resources>

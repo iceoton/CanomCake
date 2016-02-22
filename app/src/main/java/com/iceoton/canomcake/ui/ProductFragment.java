@@ -36,7 +36,7 @@ public class ProductFragment extends Fragment {
 
     private void loadCategories() {
         Retrofit retrofit = new Retrofit.Builder()
-                .baseUrl("http://188.166.218.45/")
+                .baseUrl(getResources().getString(R.string.api_url))
                 .addConverterFactory(GsonConverterFactory.create())
                 .build();
 
@@ -45,7 +45,7 @@ public class ProductFragment extends Fragment {
         call.enqueue(new Callback<GetAllCategoryResponse>() {
             @Override
             public void onResponse(Call<GetAllCategoryResponse> call, Response<GetAllCategoryResponse> response) {
-                Log.d("DEBUG", "" + response.body().getResult().size());
+                Log.d("DEBUG", "Number of category = " + response.body().getResult().size());
                 CategoryListAdapter categoryListAdapter
                         = new CategoryListAdapter(getContext(), response.body().getResult());
                 listViewCategory.setAdapter(categoryListAdapter);

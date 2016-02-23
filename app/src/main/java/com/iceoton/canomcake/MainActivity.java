@@ -6,6 +6,7 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.content.ContextCompat;
 import android.support.v4.view.ViewPager;
+import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.Menu;
@@ -26,6 +27,7 @@ import java.util.Vector;
 public class MainActivity extends AppCompatActivity implements ViewPager.OnPageChangeListener, TabHost.OnTabChangeListener {
 
     private final static String TAG = "MainActivity";
+    private TextView titleBar;
     private TabHost mTabHost;
     private ViewPager mViewPager;
     private HashMap<String, TabInfo> mapTabInfo = new HashMap<String, TabInfo>();
@@ -57,9 +59,6 @@ public class MainActivity extends AppCompatActivity implements ViewPager.OnPageC
 
         private final Context mContext;
 
-        /**
-         * @param context
-         */
         public TabFactory(Context context) {
             mContext = context;
         }
@@ -84,7 +83,13 @@ public class MainActivity extends AppCompatActivity implements ViewPager.OnPageC
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+        ActionBar mActionBar = getSupportActionBar();
+        mActionBar.setCustomView(R.layout.custom_actionbar);
+        mActionBar.setDisplayShowCustomEnabled(true);
+        titleBar = (TextView)mActionBar.getCustomView().findViewById(R.id.text_title);
+
         titleList = getResources().getStringArray(R.array.menu_title);
+        titleBar.setText(titleList[0]);
 
         // Initialise the TabHost
         this.initialiseTabHost(savedInstanceState);
@@ -139,7 +144,7 @@ public class MainActivity extends AppCompatActivity implements ViewPager.OnPageC
     @Override
     public void onPageSelected(int position) {
         this.mTabHost.setCurrentTab(position);
-        setTitle(titleList[position]);
+        titleBar.setText(titleList[position]);
         Log.d(TAG, "current fragment id = " + mViewPager.getCurrentItem());
     }
 
@@ -154,7 +159,7 @@ public class MainActivity extends AppCompatActivity implements ViewPager.OnPageC
     private void initialiseTabHost(Bundle args) {
         mTabHost = (TabHost) findViewById(android.R.id.tabhost);
         mTabHost.setup();
-        TabInfo tabInfo = null;
+        TabInfo tabInfo;
         mTabHost.getTabWidget().setBackgroundResource(R.drawable.tab_indicator);
         AddTab(this, this.mTabHost, this.mTabHost
                         .newTabSpec("Product").setIndicator("", ContextCompat.getDrawable(this, R.drawable.product)),

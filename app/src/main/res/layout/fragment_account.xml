@@ -4,9 +4,9 @@
     android:layout_height="match_parent"
     android:gravity="center">
 
-    <TextView
-        android:text="account"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"/>
+    <ListView
+        android:id="@+id/list_account_menu"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"/>
 
 </RelativeLayout>

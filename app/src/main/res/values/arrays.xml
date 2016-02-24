@@ -4,4 +4,20 @@
         <item>Product</item>
         <item>Account</item>
     </string-array>
+
+    <string-array name="account_menu_name">
+        <item>การแจ้งเตือน</item>
+        <item>แจ้งชำระเงิน</item>
+        <item>ประวัติการสั่งซื้อ</item>
+        <item>จัดการบัญชีของฉัน</item>
+        <item>ออกจากระบบ</item>
+    </string-array>
+
+    <string-array name="account_menu_icon">
+        <item>@drawable/notification_icon</item>
+        <item>@drawable/payment_confirm_icon</item>
+        <item>@drawable/history_icon</item>
+        <item>@drawable/manage_acount_icon</item>
+        <item>@drawable/logout_icon</item>
+    </string-array>
 </resources>

@@ -12,11 +12,13 @@ import android.view.ViewGroup;
 import com.iceoton.canomcake.MainActivity;
 import com.iceoton.canomcake.R;
 
+import util.AppPreference;
+
 public class SplashFragment extends Fragment {
     Handler handler;
     Runnable runnable;
     long delay_time;
-    long time = 3000L;
+    long time = 2000L;
 
     public SplashFragment() {
         // Required empty public constructor
@@ -33,9 +35,17 @@ public class SplashFragment extends Fragment {
         runnable = new Runnable() {
             @Override
             public void run() {
-                Intent intentToMain = new Intent(getActivity(), MainActivity.class);
-                startActivity(intentToMain);
-                getActivity().finish();
+                AppPreference appPreference = new AppPreference(getActivity());
+                if(appPreference.getLoginStatus()){
+                    Intent intentToMain = new Intent(getActivity(), MainActivity.class);
+                    startActivity(intentToMain);
+                    getActivity().finish();
+                } else {
+                    Intent intentToLogin = new Intent(getActivity(), LoginActivity.class);
+                    startActivity(intentToLogin);
+                    getActivity().finish();
+                }
+
             }
         };
 

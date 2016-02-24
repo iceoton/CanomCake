@@ -2,9 +2,8 @@ package com.iceoton.canomcake.model;
 
 import com.google.gson.annotations.Expose;
 
-import java.util.ArrayList;
 
-public class GetAllCategoryResponse {
+public class UserLoginResponse {
     @Expose
     int success;
     @Expose
@@ -12,7 +11,7 @@ public class GetAllCategoryResponse {
     @Expose
     String error_msg;
     @Expose
-    ArrayList<Category> result;
+    User result;
 
     public int getSuccessValue() {
         return success;
@@ -26,7 +25,7 @@ public class GetAllCategoryResponse {
         return error_msg;
     }
 
-    public ArrayList<Category> getResult() {
+    public User getUser() {
         return result;
     }
 }

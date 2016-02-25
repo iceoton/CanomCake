@@ -17,6 +17,7 @@ import com.iceoton.canomcake.R;
 import com.iceoton.canomcake.model.User;
 import com.iceoton.canomcake.model.UserLoginResponse;
 import com.iceoton.canomcake.service.CanomCakeService;
+import com.iceoton.canomcake.util.AppPreference;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -26,7 +27,6 @@ import retrofit2.Callback;
 import retrofit2.Response;
 import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
-import util.AppPreference;
 
 public class LoginFragment extends Fragment {
     EditText etUsername, etPassword;

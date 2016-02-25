@@ -15,8 +15,7 @@ import android.widget.Toast;
 
 import com.iceoton.canomcake.R;
 import com.iceoton.canomcake.adapter.AccountMenuListAdapter;
-
-import util.AppPreference;
+import com.iceoton.canomcake.util.AppPreference;
 
 public class AccountFragment extends Fragment {
     ListView listAccountMenu;

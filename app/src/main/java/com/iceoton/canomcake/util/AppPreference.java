@@ -1,4 +1,4 @@
-package util;
+package com.iceoton.canomcake.util;
 
 import android.content.Context;
 import android.content.SharedPreferences;

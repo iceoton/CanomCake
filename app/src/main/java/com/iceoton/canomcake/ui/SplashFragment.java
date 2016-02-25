@@ -11,8 +11,7 @@ import android.view.ViewGroup;
 
 import com.iceoton.canomcake.MainActivity;
 import com.iceoton.canomcake.R;
-
-import util.AppPreference;
+import com.iceoton.canomcake.util.AppPreference;
 
 public class SplashFragment extends Fragment {
     Handler handler;

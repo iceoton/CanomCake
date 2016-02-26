@@ -14,10 +14,11 @@ import android.view.View;
 import android.widget.TabHost;
 import android.widget.TabWidget;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.iceoton.canomcake.adapter.PagerAdapter;
 import com.iceoton.canomcake.ui.AccountFragment;
-import com.iceoton.canomcake.ui.CategoryFragment;
+import com.iceoton.canomcake.ui.ProductFragment;
 
 import java.util.HashMap;
 import java.util.List;
@@ -127,7 +128,7 @@ public class MainActivity extends AppCompatActivity implements ViewPager.OnPageC
     private void initialiseViewPager() {
 
         List<Fragment> fragments = new Vector<Fragment>();
-        fragments.add(Fragment.instantiate(this, CategoryFragment.class.getName()));
+        fragments.add(Fragment.instantiate(this, ProductFragment.class.getName()));
         fragments.add(Fragment.instantiate(this, AccountFragment.class.getName()));
         this.mPagerAdapter = new PagerAdapter(
                 super.getSupportFragmentManager(), fragments);
@@ -163,7 +164,7 @@ public class MainActivity extends AppCompatActivity implements ViewPager.OnPageC
         mTabHost.getTabWidget().setBackgroundResource(R.drawable.tab_indicator);
         AddTab(this, this.mTabHost, this.mTabHost
                         .newTabSpec("Product").setIndicator("", ContextCompat.getDrawable(this, R.drawable.product)),
-                (tabInfo = new TabInfo("Product", CategoryFragment.class, args)));
+                (tabInfo = new TabInfo("Product", ProductFragment.class, args)));
         this.mapTabInfo.put(tabInfo.tag, tabInfo);
 
         AddTab(this, this.mTabHost, this.mTabHost
@@ -207,5 +208,19 @@ public class MainActivity extends AppCompatActivity implements ViewPager.OnPageC
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         return super.onCreateOptionsMenu(menu);
+    }
+
+    // Get back press work only at second press and notify user to press again
+    // to exit.
+    private static long back_pressed;
+    @Override
+    public void onBackPressed() {
+        if (back_pressed + 2000 > System.currentTimeMillis()) {
+            super.onBackPressed(); // Exit
+        } else {
+            Toast.makeText(getBaseContext(), R.string.press_one_again,
+                    Toast.LENGTH_SHORT).show();
+        }
+        back_pressed = System.currentTimeMillis();
     }
 }

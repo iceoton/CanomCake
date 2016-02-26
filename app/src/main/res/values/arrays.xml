@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string-array name="menu_title">
-        <item>หมวดหมู่สินค้า</item>
+        <item>สินค้า</item>
         <item>บัญชีผู้ใช้งาน</item>
     </string-array>
 

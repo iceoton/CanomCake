@@ -1,4 +1,4 @@
-package com.iceoton.canomcake.ui;
+package com.iceoton.canomcake.fragment;
 
 
 import android.content.Intent;
@@ -10,12 +10,15 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import com.iceoton.canomcake.R;
+import com.iceoton.canomcake.activity.ProductDetailActivity;
 
 public class ProductListFragment extends Fragment {
     Bundle bundle;
 
-    public ProductListFragment() {
-        // Required empty public constructor
+    public static ProductListFragment newInstance(Bundle args){
+        ProductListFragment fragment = new ProductListFragment();
+        fragment.setArguments(args);
+        return fragment;
     }
 
 
@@ -23,13 +26,13 @@ public class ProductListFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View rootView = inflater.inflate(R.layout.fragment_product_list, container, false);
-        bundle = getArguments();
         initialView(rootView);
 
         return rootView;
     }
 
     private void initialView(View rootView) {
+        bundle = getArguments();
         int categoryId = bundle.getInt("category_id");
         TextView textView = (TextView) rootView.findViewById(R.id.text);
         textView.setText("Category id = " + categoryId);

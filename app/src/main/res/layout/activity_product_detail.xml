@@ -3,7 +3,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="com.iceoton.canomcake.ui.ProductDetailActivity">
+    tools:context=".activity.ProductDetailActivity">
 
     <FrameLayout
         android:id="@+id/contentContainer"

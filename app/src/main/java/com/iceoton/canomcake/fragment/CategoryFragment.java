@@ -1,4 +1,4 @@
-package com.iceoton.canomcake.ui;
+package com.iceoton.canomcake.fragment;
 
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -11,6 +11,7 @@ import android.widget.AdapterView;
 import android.widget.ListView;
 
 import com.iceoton.canomcake.R;
+import com.iceoton.canomcake.activity.MainActivity;
 import com.iceoton.canomcake.adapter.CategoryListAdapter;
 import com.iceoton.canomcake.model.GetAllCategoryResponse;
 import com.iceoton.canomcake.service.CanomCakeService;
@@ -24,6 +25,11 @@ import retrofit2.converter.gson.GsonConverterFactory;
 public class CategoryFragment extends Fragment {
     private ListView listViewCategory;
 
+    public static Fragment newInstance() {
+        CategoryFragment fragment = new CategoryFragment();
+        return fragment;
+    }
+
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
@@ -31,7 +37,7 @@ public class CategoryFragment extends Fragment {
         listViewCategory = (ListView) rootView.findViewById(R.id.list_category);
 
         loadCategories();
-
+        Log.d("DEBUG", "onCreateView in CategoryFragment");
         return rootView;
     }
 
@@ -53,7 +59,7 @@ public class CategoryFragment extends Fragment {
                 listViewCategory.setOnItemClickListener(new AdapterView.OnItemClickListener() {
                     @Override
                     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                        ((ProductFragment) getParentFragment()).showProductByCategory((int) id);
+                        showProductByCategory((int) id);
                     }
                 });
             }
@@ -64,6 +70,13 @@ public class CategoryFragment extends Fragment {
             }
         });
     }
-}
 
+    public void showProductByCategory(int categoryId) {
+        Log.d("DEBUG", "Show product in category id = " + categoryId);
+        Bundle bundle = new Bundle();
+        bundle.putInt("category_id", categoryId);
+        ((MainActivity) getActivity()).placeFragmentToContrainer(ProductListFragment.newInstance(bundle));
+    }
+
+}
 

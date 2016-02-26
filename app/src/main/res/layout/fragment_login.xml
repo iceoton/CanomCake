@@ -3,7 +3,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="#F1F5F7"
-    tools:context="com.iceoton.canomcake.ui.LoginFragment">
+    tools:context="com.iceoton.canomcake.fragment.LoginFragment">
 
     <LinearLayout
         android:layout_width="300dp"

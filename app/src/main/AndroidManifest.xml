@@ -12,7 +12,7 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
         <activity
-            android:name=".ui.WelcomeActivity"
+            android:name=".activity.WelcomeActivity"
             android:theme="@style/Theme.AppCompat.Light.NoActionBar">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -20,12 +20,12 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".MainActivity" />
+        <activity android:name=".activity.MainActivity" />
         <activity
-            android:name=".ui.LoginActivity"
+            android:name=".activity.LoginActivity"
             android:theme="@style/Theme.AppCompat.Light.NoActionBar" />
 
-        <activity android:name=".ui.ProductDetailActivity"></activity>
+        <activity android:name=".activity.ProductDetailActivity"></activity>
     </application>
 
 </manifest>

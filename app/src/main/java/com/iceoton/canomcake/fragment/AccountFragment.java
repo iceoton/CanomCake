@@ -1,4 +1,4 @@
-package com.iceoton.canomcake.ui;
+package com.iceoton.canomcake.fragment;
 
 import android.content.Intent;
 import android.content.res.TypedArray;
@@ -14,11 +14,17 @@ import android.widget.ListView;
 import android.widget.Toast;
 
 import com.iceoton.canomcake.R;
+import com.iceoton.canomcake.activity.LoginActivity;
 import com.iceoton.canomcake.adapter.AccountMenuListAdapter;
 import com.iceoton.canomcake.util.AppPreference;
 
 public class AccountFragment extends Fragment {
     ListView listAccountMenu;
+
+    public static Fragment newInstance() {
+        AccountFragment fragment = new AccountFragment();
+        return fragment;
+    }
 
     @Nullable
     @Override

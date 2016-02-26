@@ -1,4 +1,4 @@
-package com.iceoton.canomcake.ui;
+package com.iceoton.canomcake.fragment;
 
 
 import android.app.AlertDialog;
@@ -11,8 +11,9 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-import com.iceoton.canomcake.MainActivity;
 import com.iceoton.canomcake.R;
+import com.iceoton.canomcake.activity.LoginActivity;
+import com.iceoton.canomcake.activity.MainActivity;
 import com.iceoton.canomcake.util.AppPreference;
 import com.iceoton.canomcake.util.InternetConnection;
 

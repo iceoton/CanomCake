@@ -20,13 +20,13 @@ import retrofit2.Response;
 import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
 
-public class ProductFragment extends Fragment {
+public class CategoryFragment extends Fragment {
     private ListView listViewCategory;
 
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        View rootView = inflater.inflate(R.layout.fragment_product, container, false);
+        View rootView = inflater.inflate(R.layout.fragment_category, container, false);
         listViewCategory = (ListView) rootView.findViewById(R.id.list_category);
 
         loadCategories();

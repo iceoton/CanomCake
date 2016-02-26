@@ -17,7 +17,7 @@ import android.widget.TextView;
 
 import com.iceoton.canomcake.adapter.PagerAdapter;
 import com.iceoton.canomcake.ui.AccountFragment;
-import com.iceoton.canomcake.ui.ProductFragment;
+import com.iceoton.canomcake.ui.CategoryFragment;
 
 import java.util.HashMap;
 import java.util.List;
@@ -127,7 +127,7 @@ public class MainActivity extends AppCompatActivity implements ViewPager.OnPageC
     private void initialiseViewPager() {
 
         List<Fragment> fragments = new Vector<Fragment>();
-        fragments.add(Fragment.instantiate(this, ProductFragment.class.getName()));
+        fragments.add(Fragment.instantiate(this, CategoryFragment.class.getName()));
         fragments.add(Fragment.instantiate(this, AccountFragment.class.getName()));
         this.mPagerAdapter = new PagerAdapter(
                 super.getSupportFragmentManager(), fragments);
@@ -163,7 +163,7 @@ public class MainActivity extends AppCompatActivity implements ViewPager.OnPageC
         mTabHost.getTabWidget().setBackgroundResource(R.drawable.tab_indicator);
         AddTab(this, this.mTabHost, this.mTabHost
                         .newTabSpec("Product").setIndicator("", ContextCompat.getDrawable(this, R.drawable.product)),
-                (tabInfo = new TabInfo("Product", ProductFragment.class, args)));
+                (tabInfo = new TabInfo("Product", CategoryFragment.class, args)));
         this.mapTabInfo.put(tabInfo.tag, tabInfo);
 
         AddTab(this, this.mTabHost, this.mTabHost

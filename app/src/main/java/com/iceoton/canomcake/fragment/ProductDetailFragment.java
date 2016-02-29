@@ -14,9 +14,12 @@ import android.widget.TextView;
 import com.bumptech.glide.Glide;
 import com.iceoton.canomcake.R;
 import com.iceoton.canomcake.activity.ProductDetailActivity;
+import com.iceoton.canomcake.database.DatabaseDAO;
+import com.iceoton.canomcake.database.OrderItem;
 import com.iceoton.canomcake.model.GetProductByCodeResponse;
 import com.iceoton.canomcake.model.Product;
 import com.iceoton.canomcake.service.CanomCakeService;
+import com.iceoton.canomcake.util.CartManagement;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -32,6 +35,7 @@ public class ProductDetailFragment extends Fragment {
     TextView txtName, txtDetail, txtPrice, txtUnit;
     Button btnAddToCart;
     TextView titleBar;
+    TextView txtCountInCart;
 
     public static ProductDetailFragment newInstance(Bundle args) {
         ProductDetailFragment fragment = new ProductDetailFragment();
@@ -72,6 +76,15 @@ public class ProductDetailFragment extends Fragment {
             }
         });
         titleBar = (TextView) mActionBar.getCustomView().findViewById(R.id.text_title);
+        txtCountInCart = (TextView) mActionBar.getCustomView().findViewById(R.id.text_count);
+        final CartManagement cartManagement = new CartManagement(getActivity());
+        cartManagement.loadCountInCart(txtCountInCart);
+        txtCountInCart.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                cartManagement.showItemInCart();
+            }
+        });
 
         loadProductByCode(productCode);
     }
@@ -93,13 +106,19 @@ public class ProductDetailFragment extends Fragment {
         call.enqueue(new Callback<GetProductByCodeResponse>() {
             @Override
             public void onResponse(Call<GetProductByCodeResponse> call, Response<GetProductByCodeResponse> response) {
-                Product product = response.body().getResult();
+                final Product product = response.body().getResult();
                 if (product != null) {
                     txtName.setText(product.getNameThai());
                     titleBar.setText(product.getNameThai());
                     txtDetail.setText(product.getDetail());
                     txtPrice.setText(Double.toString(product.getPrice()));
                     txtUnit.setText("บาท/" + product.getUnit());
+                    btnAddToCart.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            addProductToCart(product);
+                        }
+                    });
 
                     String imageUrl = getActivity().getResources().getString(R.string.api_url)
                             + product.getImageUrl();
@@ -113,6 +132,23 @@ public class ProductDetailFragment extends Fragment {
             }
         });
     }
+
+    private void addProductToCart(Product product){
+        OrderItem orderItem = new OrderItem();
+        orderItem.setProductCode(product.getCode());
+        orderItem.setAmount(1);
+        DatabaseDAO databaseDAO = new DatabaseDAO(getActivity());
+        databaseDAO.open();
+        databaseDAO.addOrderItem(orderItem);
+        // update cart
+        CartManagement cartManagement = new CartManagement(getActivity());
+        cartManagement.loadCountInCart(txtCountInCart);
+        //show dialog to checkout
+
+        databaseDAO.close();
+    }
+
+
 
 
 }

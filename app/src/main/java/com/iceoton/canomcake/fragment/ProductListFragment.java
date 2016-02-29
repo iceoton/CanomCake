@@ -20,6 +20,7 @@ import com.iceoton.canomcake.model.GetAllProductResponse;
 import com.iceoton.canomcake.model.GetProductByCategoryResponse;
 import com.iceoton.canomcake.model.Product;
 import com.iceoton.canomcake.service.CanomCakeService;
+import com.iceoton.canomcake.util.CartManagement;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -35,6 +36,7 @@ import retrofit2.converter.gson.GsonConverterFactory;
 public class ProductListFragment extends Fragment {
     Bundle bundle;
     RecyclerView recyclerView;
+    TextView txtCountInCart;
 
     public static ProductListFragment newInstance(Bundle args) {
         ProductListFragment fragment = new ProductListFragment();
@@ -58,8 +60,6 @@ public class ProductListFragment extends Fragment {
         String categoryName = bundle.getString("category_name");
 
         ActionBar mActionBar = ((MainActivity) getActivity()).getSupportActionBar();
-        mActionBar.setCustomView(R.layout.custom_actionbar);
-        mActionBar.setDisplayShowCustomEnabled(true);
         ImageView imageTitle = (ImageView) mActionBar.getCustomView().findViewById(R.id.image_title);
         imageTitle.setImageResource(R.drawable.arrow_back);
         imageTitle.setOnClickListener(new View.OnClickListener() {
@@ -70,9 +70,17 @@ public class ProductListFragment extends Fragment {
         });
         TextView titleBar = (TextView) mActionBar.getCustomView().findViewById(R.id.text_title);
         titleBar.setText(categoryName);
+        txtCountInCart = (TextView) mActionBar.getCustomView().findViewById(R.id.text_count);
 
         recyclerView = (RecyclerView) rootView.findViewById(R.id.recycler_view);
         loadProductInCategory(categoryId);
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        CartManagement cartManagement = new CartManagement(getActivity());
+        cartManagement.loadCountInCart(txtCountInCart);
     }
 
     private void loadProductInCategory(int categoryId) {

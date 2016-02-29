@@ -19,13 +19,14 @@ import android.widget.TextView;
 import com.iceoton.canomcake.R;
 import com.iceoton.canomcake.activity.MainActivity;
 import com.iceoton.canomcake.adapter.PagerAdapter;
+import com.iceoton.canomcake.util.CartManagement;
 
 import java.util.List;
 import java.util.Vector;
 
 public class MainFragment extends Fragment {
     private final static String TAG = "DEBUG";
-    private TextView titleBar;
+    private TextView titleBar, txtCountInCart;
     private TabHost mTabHost;
     private ViewPager mViewPager;
     private PagerAdapter mPagerAdapter;
@@ -72,6 +73,9 @@ public class MainFragment extends Fragment {
         mActionBar.setCustomView(R.layout.custom_actionbar);
         mActionBar.setDisplayShowCustomEnabled(true);
         titleBar = (TextView)mActionBar.getCustomView().findViewById(R.id.text_title);
+        txtCountInCart = (TextView) mActionBar.getCustomView().findViewById(R.id.text_count);
+        CartManagement cartManagement = new CartManagement(getActivity());
+        cartManagement.loadCountInCart(txtCountInCart);
 
         titleList = getResources().getStringArray(R.array.menu_title);
         titleBar.setText(titleList[0]);

@@ -54,7 +54,8 @@
         android:layout_height="32dp"
         android:layout_centerVertical="true"
         android:layout_toLeftOf="@+id/container_cart"
-        android:layout_toStartOf="@id/container_cart">
+        android:layout_toStartOf="@id/container_cart"
+        android:visibility="gone">
 
         <ImageView
             android:layout_width="24dp"

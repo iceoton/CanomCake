@@ -1,6 +1,7 @@
 package com.iceoton.canomcake.fragment;
 
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v7.app.ActionBar;
@@ -10,10 +11,12 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.iceoton.canomcake.R;
+import com.iceoton.canomcake.activity.CartActivity;
 import com.iceoton.canomcake.activity.MainActivity;
 import com.iceoton.canomcake.adapter.RecyclerViewAdapter;
 import com.iceoton.canomcake.model.GetAllProductResponse;
@@ -71,6 +74,15 @@ public class ProductListFragment extends Fragment {
         TextView titleBar = (TextView) mActionBar.getCustomView().findViewById(R.id.text_title);
         titleBar.setText(categoryName);
         txtCountInCart = (TextView) mActionBar.getCustomView().findViewById(R.id.text_count);
+        FrameLayout containerCart = (FrameLayout) mActionBar.getCustomView()
+                .findViewById(R.id.container_cart);
+        containerCart.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(getActivity(), CartActivity.class);
+                getActivity().startActivity(intent);
+            }
+        });
 
         recyclerView = (RecyclerView) rootView.findViewById(R.id.recycler_view);
         loadProductInCategory(categoryId);
@@ -79,8 +91,8 @@ public class ProductListFragment extends Fragment {
     @Override
     public void onResume() {
         super.onResume();
-        CartManagement cartManagement = new CartManagement(getActivity());
-        cartManagement.loadCountInCart(txtCountInCart);
+        final CartManagement cartManagement = new CartManagement(getActivity());
+        cartManagement.loadCountInto(txtCountInCart);
     }
 
     private void loadProductInCategory(int categoryId) {

@@ -1,6 +1,7 @@
 package com.iceoton.canomcake.fragment;
 
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v7.app.ActionBar;
@@ -8,11 +9,13 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
 import com.iceoton.canomcake.R;
+import com.iceoton.canomcake.activity.CartActivity;
 import com.iceoton.canomcake.activity.ProductDetailActivity;
 import com.iceoton.canomcake.database.DatabaseDAO;
 import com.iceoton.canomcake.database.OrderItem;
@@ -54,6 +57,13 @@ public class ProductDetailFragment extends Fragment {
         return rootView;
     }
 
+    @Override
+    public void onResume() {
+        super.onResume();
+        final CartManagement cartManagement = new CartManagement(getActivity());
+        cartManagement.loadCountInto(txtCountInCart);
+    }
+
     private void initialView(View rootView) {
         Bundle args = getArguments();
         String productCode = args.getString("product_code");
@@ -77,12 +87,13 @@ public class ProductDetailFragment extends Fragment {
         });
         titleBar = (TextView) mActionBar.getCustomView().findViewById(R.id.text_title);
         txtCountInCart = (TextView) mActionBar.getCustomView().findViewById(R.id.text_count);
-        final CartManagement cartManagement = new CartManagement(getActivity());
-        cartManagement.loadCountInCart(txtCountInCart);
-        txtCountInCart.setOnClickListener(new View.OnClickListener() {
+        FrameLayout containerCart = (FrameLayout) mActionBar.getCustomView()
+                .findViewById(R.id.container_cart);
+        containerCart.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                cartManagement.showItemInCart();
+                Intent intent = new Intent(getActivity(), CartActivity.class);
+                getActivity().startActivity(intent);
             }
         });
 
@@ -142,7 +153,7 @@ public class ProductDetailFragment extends Fragment {
         databaseDAO.addOrderItem(orderItem);
         // update cart
         CartManagement cartManagement = new CartManagement(getActivity());
-        cartManagement.loadCountInCart(txtCountInCart);
+        cartManagement.loadCountInto(txtCountInCart);
         //show dialog to checkout
 
         databaseDAO.close();

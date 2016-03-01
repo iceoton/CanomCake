@@ -10,6 +10,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
+import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.iceoton.canomcake.R;
 import com.iceoton.canomcake.activity.ProductDetailActivity;
 import com.iceoton.canomcake.model.Product;
@@ -31,7 +32,7 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
             itemView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    listener.onHolderClick(itemView , getLayoutPosition());
+                    listener.onHolderClick(itemView, getLayoutPosition());
                 }
             });
         }
@@ -69,7 +70,10 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
         Product product = products.get(position);
         String imageUrl = mContext.getResources().getString(R.string.api_url)
                 + product.getImageUrl();
-        Glide.with(mContext).load(imageUrl).into(holder.ivPhoto);
+        Glide.with(mContext)
+                .load(imageUrl)
+                .diskCacheStrategy(DiskCacheStrategy.ALL)
+                .into(holder.ivPhoto);
         holder.txtName.setText(product.getNameThai());
         holder.txtPrice.setText(product.getPrice() + " บาท/" + product.getUnit());
     }

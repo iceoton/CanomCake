@@ -2,6 +2,7 @@ package com.iceoton.canomcake.fragment;
 
 
 import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
@@ -12,11 +13,13 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.FrameLayout;
 import android.widget.TabHost;
 import android.widget.TabWidget;
 import android.widget.TextView;
 
 import com.iceoton.canomcake.R;
+import com.iceoton.canomcake.activity.CartActivity;
 import com.iceoton.canomcake.activity.MainActivity;
 import com.iceoton.canomcake.adapter.PagerAdapter;
 import com.iceoton.canomcake.util.CartManagement;
@@ -68,14 +71,28 @@ public class MainFragment extends Fragment {
         return rootView;
     }
 
+    @Override
+    public void onResume() {
+        super.onResume();
+        CartManagement cartManagement = new CartManagement(getActivity());
+        cartManagement.loadCountInto(txtCountInCart);
+    }
+
     private void initialView(View rootView, Bundle savedInstanceState) {
         ActionBar mActionBar = ((MainActivity)getActivity()).getSupportActionBar();
         mActionBar.setCustomView(R.layout.custom_actionbar);
         mActionBar.setDisplayShowCustomEnabled(true);
         titleBar = (TextView)mActionBar.getCustomView().findViewById(R.id.text_title);
         txtCountInCart = (TextView) mActionBar.getCustomView().findViewById(R.id.text_count);
-        CartManagement cartManagement = new CartManagement(getActivity());
-        cartManagement.loadCountInCart(txtCountInCart);
+        FrameLayout containerCart = (FrameLayout) mActionBar.getCustomView()
+                .findViewById(R.id.container_cart);
+        containerCart.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(getActivity(), CartActivity.class);
+                getActivity().startActivity(intent);
+            }
+        });
 
         titleList = getResources().getStringArray(R.array.menu_title);
         titleBar.setText(titleList[0]);

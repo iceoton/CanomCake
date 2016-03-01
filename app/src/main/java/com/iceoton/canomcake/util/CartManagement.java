@@ -13,7 +13,7 @@ public class CartManagement {
         this.mContext = mContext;
     }
 
-    public void loadCountInCart(TextView viewToShowCount){
+    public void loadCountInto(TextView viewToShowCount){
         DatabaseDAO databaseDAO = new DatabaseDAO(mContext);
         databaseDAO.open();
         int count =  databaseDAO.getNumberOfOrderItem();
@@ -23,13 +23,6 @@ public class CartManagement {
         } else {
             viewToShowCount.setVisibility(View.INVISIBLE);
         }
-        databaseDAO.close();
-    }
-
-    public void showItemInCart(){
-        DatabaseDAO databaseDAO = new DatabaseDAO(mContext);
-        databaseDAO.open();
-        databaseDAO.clearOrderItem();
         databaseDAO.close();
     }
 }

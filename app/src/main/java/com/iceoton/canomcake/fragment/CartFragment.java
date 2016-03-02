@@ -105,7 +105,7 @@ public class CartFragment extends Fragment {
         titleBar.setText("สินค้าในรถเข็น");
     }
 
-    private void updateFooterView(){
+    public void updateFooterView(){
         int totalAmount = 0;
         double totalPrice = 0;
         for (int i = 0; i < orderItems.size(); i++){
@@ -144,7 +144,8 @@ public class CartFragment extends Fragment {
                     loadItemCount++;
                     if(loadItemCount == orderItems.size()){
                         // load all data finished.
-                        OrderItemListAdapter itemListAdapter = new OrderItemListAdapter(getActivity(), orderItems, products);
+                        OrderItemListAdapter itemListAdapter = new OrderItemListAdapter(getActivity(),
+                                orderItems, products, CartFragment.this);
                         listOrderItem.setAdapter(itemListAdapter);
                         updateFooterView();
                     }

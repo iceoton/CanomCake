@@ -14,6 +14,7 @@ import com.bumptech.glide.Glide;
 import com.iceoton.canomcake.R;
 import com.iceoton.canomcake.database.DatabaseDAO;
 import com.iceoton.canomcake.database.OrderItem;
+import com.iceoton.canomcake.fragment.CartFragment;
 import com.iceoton.canomcake.model.Product;
 
 import java.util.ArrayList;
@@ -37,11 +38,14 @@ public class OrderItemListAdapter extends BaseAdapter {
     Context mContext;
     ArrayList<OrderItem> orderItems;
     ArrayList<Product> products;
+    CartFragment cartFragment;
 
-    public OrderItemListAdapter(Context mContext, ArrayList<OrderItem> orderItems, ArrayList<Product> products) {
+    public OrderItemListAdapter(Context mContext, ArrayList<OrderItem> orderItems,
+                                ArrayList<Product> products, CartFragment cartFragment) {
         this.mContext = mContext;
         this.orderItems = orderItems;
         this.products = products;
+        this.cartFragment = cartFragment;
     }
 
     @Override
@@ -107,5 +111,7 @@ public class OrderItemListAdapter extends BaseAdapter {
         orderItems.remove(position);
         products.remove(position);
         notifyDataSetChanged();
+        cartFragment.updateFooterView();
     }
+
 }

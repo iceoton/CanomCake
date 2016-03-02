@@ -84,7 +84,6 @@ public class CartFragment extends Fragment {
                 Toast.makeText(getActivity(), "สั่งซื้อสินค้าเรียบร้อยแล้ว", Toast.LENGTH_SHORT).show();
             }
         });
-        updateFooterView();
     }
 
     private void initialActionBar(){
@@ -108,12 +107,15 @@ public class CartFragment extends Fragment {
 
     private void updateFooterView(){
         int totalAmount = 0;
+        double totalPrice = 0;
         for (int i = 0; i < orderItems.size(); i++){
             totalAmount += orderItems.get(i).getAmount();
+            totalPrice += (orderItems.get(i).getAmount() * products.get(i).getPrice());
         }
         TextView txtTotalAmount = (TextView) footerView.findViewById(R.id.text_total_amount);
         txtTotalAmount.setText(String.valueOf(totalAmount));
-
+        TextView txtTotalPrice = (TextView) footerView.findViewById(R.id.text_total_price);
+        txtTotalPrice.setText(String.valueOf(totalPrice) + " บาท");
     }
 
     private void loadProductFromServer(final int position) {
@@ -141,8 +143,10 @@ public class CartFragment extends Fragment {
                     products.set(position, product);
                     loadItemCount++;
                     if(loadItemCount == orderItems.size()){
+                        // load all data finished.
                         OrderItemListAdapter itemListAdapter = new OrderItemListAdapter(getActivity(), orderItems, products);
                         listOrderItem.setAdapter(itemListAdapter);
+                        updateFooterView();
                     }
                 }
             }

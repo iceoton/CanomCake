@@ -11,5 +11,9 @@
     <style name="Text.Body" parent="TextAppearance.AppCompat.Medium">
         <item name="android:textSize">16sp</item>
     </style>
+    
+    <style name="Text.Cart.Body" parent="TextAppearance.AppCompat.Medium">
+        <item name="android:textSize">16sp</item>
+    </style>
 
 </resources>

@@ -155,8 +155,11 @@ public class ProductDetailFragment extends Fragment {
         CartManagement cartManagement = new CartManagement(getActivity());
         cartManagement.loadCountInto(txtCountInCart);
         //show dialog to checkout
-
         databaseDAO.close();
+        // exit this fragment
+        if (!getActivity().getSupportFragmentManager().popBackStackImmediate()) {
+            getActivity().supportFinishAfterTransition();
+        }
     }
 
 

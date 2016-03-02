@@ -14,20 +14,9 @@ import com.bumptech.glide.Glide;
 import com.iceoton.canomcake.R;
 import com.iceoton.canomcake.database.DatabaseDAO;
 import com.iceoton.canomcake.database.OrderItem;
-import com.iceoton.canomcake.model.GetProductByCodeResponse;
 import com.iceoton.canomcake.model.Product;
-import com.iceoton.canomcake.service.CanomCakeService;
-
-import org.json.JSONException;
-import org.json.JSONObject;
 
 import java.util.ArrayList;
-
-import retrofit2.Call;
-import retrofit2.Callback;
-import retrofit2.Response;
-import retrofit2.Retrofit;
-import retrofit2.converter.gson.GsonConverterFactory;
 
 public class OrderItemListAdapter extends BaseAdapter {
 
@@ -47,10 +36,12 @@ public class OrderItemListAdapter extends BaseAdapter {
 
     Context mContext;
     ArrayList<OrderItem> orderItems;
+    ArrayList<Product> products;
 
-    public OrderItemListAdapter(Context mContext, ArrayList<OrderItem> orderItems) {
+    public OrderItemListAdapter(Context mContext, ArrayList<OrderItem> orderItems, ArrayList<Product> products) {
         this.mContext = mContext;
         this.orderItems = orderItems;
+        this.products = products;
     }
 
     @Override
@@ -82,7 +73,21 @@ public class OrderItemListAdapter extends BaseAdapter {
         Log.d("DEBUG", "get item " + position);
         OrderItem orderItem = orderItems.get(position);
         // load product by product_code
-        loadProductFromServer(orderItem, viewHolder);
+        Product product = products.get(position);
+        if (product != null) {
+            Log.d("DEBUG", "load image " + product.getNameThai() + "finish");
+            String imageUrl = mContext.getResources().getString(R.string.api_url)
+                    + product.getImageUrl();
+            Glide.with(mContext).load(imageUrl)
+                    .placeholder(R.drawable.product_photo)
+                    .crossFade()
+                    .into(viewHolder.imageViewProduct);
+
+            viewHolder.textProductName.setText(product.getNameThai());
+            String strPrice = String.valueOf(product.getPrice()) + " บาท/" + product.getUnit();
+            viewHolder.textProductPrice.setText(strPrice);
+            viewHolder.editTextAmount.setText(String.valueOf(orderItem.getAmount()));
+        }
 
         viewHolder.textDelete.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -94,55 +99,13 @@ public class OrderItemListAdapter extends BaseAdapter {
         return convertView;
     }
 
-    private void loadProductFromServer(final OrderItem orderItem, final ViewHolder viewHolder) {
-        Log.d("DEBUG", "load image from server");
-        JSONObject data = new JSONObject();
-        try {
-            data.put("code", orderItem.getProductCode());
-        } catch (JSONException e) {
-            e.printStackTrace();
-        }
-
-        Retrofit retrofit = new Retrofit.Builder()
-                .baseUrl(mContext.getResources().getString(R.string.api_url))
-                .addConverterFactory(GsonConverterFactory.create())
-                .build();
-
-        CanomCakeService canomCakeService = retrofit.create(CanomCakeService.class);
-        Call call = canomCakeService.loadProductByCode("getProductByCode", data.toString());
-        call.enqueue(new Callback<GetProductByCodeResponse>() {
-            @Override
-            public void onResponse(Call<GetProductByCodeResponse> call, Response<GetProductByCodeResponse> response) {
-                final Product product = response.body().getResult();
-                if (product != null) {
-                    Log.d("DEBUG", "load image " + product.getNameThai() + "finish");
-                    String imageUrl = mContext.getResources().getString(R.string.api_url)
-                            + product.getImageUrl();
-                    Glide.with(mContext).load(imageUrl)
-                            .placeholder(R.drawable.product_photo)
-                            .crossFade()
-                            .into(viewHolder.imageViewProduct);
-
-                    viewHolder.textProductName.setText(product.getNameThai());
-                    String strPrice = String.valueOf(product.getPrice()) + " บาท/" + product.getUnit();
-                    viewHolder.textProductPrice.setText(strPrice);
-                    viewHolder.editTextAmount.setText(String.valueOf(orderItem.getAmount()));
-                }
-            }
-
-            @Override
-            public void onFailure(Call<GetProductByCodeResponse> call, Throwable t) {
-                Log.d("DEBUG", "Call CanomCake-API failure." + "\n" + t.getMessage());
-            }
-        });
-    }
-
     private void deleteThisOutOfCart(int position) {
-        notifyDataSetChanged();
         DatabaseDAO databaseDAO = new DatabaseDAO(mContext);
         databaseDAO.open();
         databaseDAO.deleteOrderItem(orderItems.get(position).getId());
         databaseDAO.close();
         orderItems.remove(position);
+        products.remove(position);
+        notifyDataSetChanged();
     }
 }

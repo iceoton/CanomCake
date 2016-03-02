@@ -4,6 +4,7 @@ package com.iceoton.canomcake.fragment;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v7.app.ActionBar;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -19,13 +20,27 @@ import com.iceoton.canomcake.activity.CartActivity;
 import com.iceoton.canomcake.adapter.OrderItemListAdapter;
 import com.iceoton.canomcake.database.DatabaseDAO;
 import com.iceoton.canomcake.database.OrderItem;
+import com.iceoton.canomcake.model.GetProductByCodeResponse;
+import com.iceoton.canomcake.model.Product;
+import com.iceoton.canomcake.service.CanomCakeService;
+
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import java.util.ArrayList;
+
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
+import retrofit2.Retrofit;
+import retrofit2.converter.gson.GsonConverterFactory;
 
 public class CartFragment extends Fragment {
     ListView listOrderItem;
     View footerView;
     ArrayList<OrderItem> orderItems;
+    ArrayList<Product> products;
+    int loadItemCount;
 
     public static CartFragment newInstance(Bundle args) {
         CartFragment fragment = new CartFragment();
@@ -54,8 +69,13 @@ public class CartFragment extends Fragment {
         footerView = getLayoutInflater(null).inflate(R.layout.footer_list_of_item, null, false);
         listOrderItem.addFooterView(footerView);
 
-        OrderItemListAdapter itemListAdapter = new OrderItemListAdapter(getActivity(), orderItems);
-        listOrderItem.setAdapter(itemListAdapter);
+        loadItemCount = 0;
+        products = new ArrayList<>(orderItems.size());
+        Log.d("DEBUG", "Product lis size is " + products.size());
+        for(int i = 0; i < orderItems.size(); i++){
+            products.add(null); //initial list item in this position
+            loadProductFromServer(i);
+        }
 
         Button btnMakeOrder = (Button) footerView.findViewById(R.id.btn_make_order);
         btnMakeOrder.setOnClickListener(new View.OnClickListener() {
@@ -96,6 +116,43 @@ public class CartFragment extends Fragment {
 
     }
 
+    private void loadProductFromServer(final int position) {
+        Log.d("DEBUG", "load image from server");
+        JSONObject data = new JSONObject();
+        try {
+            data.put("code", orderItems.get(position).getProductCode());
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+
+        Retrofit retrofit = new Retrofit.Builder()
+                .baseUrl(getContext().getResources().getString(R.string.api_url))
+                .addConverterFactory(GsonConverterFactory.create())
+                .build();
+
+        CanomCakeService canomCakeService = retrofit.create(CanomCakeService.class);
+        Call call = canomCakeService.loadProductByCode("getProductByCode", data.toString());
+        call.enqueue(new Callback<GetProductByCodeResponse>() {
+            @Override
+            public void onResponse(Call<GetProductByCodeResponse> call, Response<GetProductByCodeResponse> response) {
+                final Product product = response.body().getResult();
+                if (product != null) {
+                    Log.d("DEBUG", "load image " + product.getNameThai() + "finish");
+                    products.set(position, product);
+                    loadItemCount++;
+                    if(loadItemCount == orderItems.size()){
+                        OrderItemListAdapter itemListAdapter = new OrderItemListAdapter(getActivity(), orderItems, products);
+                        listOrderItem.setAdapter(itemListAdapter);
+                    }
+                }
+            }
+
+            @Override
+            public void onFailure(Call<GetProductByCodeResponse> call, Throwable t) {
+                Log.d("DEBUG", "Call CanomCake-API failure." + "\n" + t.getMessage());
+            }
+        });
+    }
 
 
 }

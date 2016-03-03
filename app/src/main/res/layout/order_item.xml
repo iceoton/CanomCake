@@ -49,13 +49,18 @@
         android:layout_height="match_parent"
         android:orientation="vertical">
 
-        <EditText
+
+        <TextView
             android:id="@+id/edit_amount"
             android:layout_width="wrap_content"
             android:layout_height="0dp"
             android:layout_weight="1"
+            android:gravity="center_vertical"
             android:minWidth="32dp"
-            android:text="1" />
+            android:text="1"
+            android:textSize="20sp"
+            android:textStyle="bold"
+            android:drawableRight="@drawable/icon_edit"/>
 
         <TextView
             android:id="@+id/text_delete"

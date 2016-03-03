@@ -1,11 +1,15 @@
 package com.iceoton.canomcake.adapter;
 
+import android.app.Dialog;
+import android.content.ContentValues;
 import android.content.Context;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.Window;
 import android.widget.BaseAdapter;
+import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -14,6 +18,7 @@ import com.bumptech.glide.Glide;
 import com.iceoton.canomcake.R;
 import com.iceoton.canomcake.database.DatabaseDAO;
 import com.iceoton.canomcake.database.OrderItem;
+import com.iceoton.canomcake.database.OrderItemTable;
 import com.iceoton.canomcake.fragment.CartFragment;
 import com.iceoton.canomcake.model.Product;
 
@@ -23,14 +28,13 @@ public class OrderItemListAdapter extends BaseAdapter {
 
     static class ViewHolder {
         public ImageView imageViewProduct;
-        public TextView textProductName, textProductPrice, textDelete;
-        public EditText editTextAmount;
+        public TextView textProductName, textProductPrice, textDelete, textAmount;
 
         public ViewHolder(View convertView) {
             this.imageViewProduct = (ImageView) convertView.findViewById(R.id.image_product);
             this.textProductName = (TextView) convertView.findViewById(R.id.text_name);
             this.textProductPrice = (TextView) convertView.findViewById(R.id.text_price);
-            this.editTextAmount = (EditText) convertView.findViewById(R.id.edit_amount);
+            this.textAmount = (TextView) convertView.findViewById(R.id.edit_amount);
             this.textDelete = (TextView) convertView.findViewById(R.id.text_delete);
         }
     }
@@ -75,7 +79,7 @@ public class OrderItemListAdapter extends BaseAdapter {
             viewHolder = (ViewHolder) convertView.getTag();
         }
         Log.d("DEBUG", "get item " + position);
-        OrderItem orderItem = orderItems.get(position);
+        final OrderItem orderItem = orderItems.get(position);
         // load product by product_code
         Product product = products.get(position);
         if (product != null) {
@@ -90,7 +94,35 @@ public class OrderItemListAdapter extends BaseAdapter {
             viewHolder.textProductName.setText(product.getNameThai());
             String strPrice = String.valueOf(product.getPrice()) + " บาท/" + product.getUnit();
             viewHolder.textProductPrice.setText(strPrice);
-            viewHolder.editTextAmount.setText(String.valueOf(orderItem.getAmount()));
+            viewHolder.textAmount.setText(String.valueOf(orderItem.getAmount()));
+            viewHolder.textAmount.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    final Dialog dialog = new Dialog(mContext);
+                    dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
+                    dialog.setContentView(R.layout.dialog_select_amount);
+                    dialog.setCancelable(true);
+
+                    final EditText editAmount = (EditText) dialog.findViewById(R.id.edit_amount);
+                    editAmount.setText(String.valueOf(orderItem.getAmount()));
+                    Button btnOK = (Button) dialog.findViewById(R.id.btn_ok);
+
+                    btnOK.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            int newAmount = Integer.parseInt(editAmount.getText().toString());
+                            editAmount(orderItem.getId(), newAmount);
+                            orderItem.setAmount(newAmount);
+                            orderItems.set(position, orderItem);
+                            notifyDataSetChanged();
+                            cartFragment.updateFooterView();
+                            dialog.dismiss();
+                        }
+                    });
+
+                    dialog.show();
+                }
+            });
         }
 
         viewHolder.textDelete.setOnClickListener(new View.OnClickListener() {
@@ -114,4 +146,13 @@ public class OrderItemListAdapter extends BaseAdapter {
         cartFragment.updateFooterView();
     }
 
+    private void editAmount(int orderId, int newAmount) {
+        ContentValues values = new ContentValues();
+        values.put(OrderItemTable.Columns._AMOUNT, newAmount);
+
+        DatabaseDAO databaseDAO = new DatabaseDAO(mContext);
+        databaseDAO.open();
+        databaseDAO.updateOrderItemByValues(orderId, values);
+        databaseDAO.close();
+    }
 }

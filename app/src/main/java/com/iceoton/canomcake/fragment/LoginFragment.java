@@ -99,7 +99,8 @@ public class LoginFragment extends Fragment {
 
                     startMainActivity();
                 } else {
-                    Toast.makeText(getActivity(), response.body().getErrorMessage(), Toast.LENGTH_SHORT).show();
+                    Log.d("DEBUG","Login error: " + response.body().getErrorMessage());
+                    Toast.makeText(getActivity(), "ไม่พบอีเมลนี้หรือรหัสผ่านไม่ถูกต้อง", Toast.LENGTH_SHORT).show();
                 }
             }
 

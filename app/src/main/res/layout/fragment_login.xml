@@ -27,7 +27,7 @@
             android:layout_width="match_parent"
             android:layout_height="50dp"
             android:layout_margin="8dp"
-            android:hint="ชื่อผู้ใช้งาน" />
+            android:hint="อีเมลผู้ใช้งาน" />
 
         <EditText
             android:id="@+id/password"

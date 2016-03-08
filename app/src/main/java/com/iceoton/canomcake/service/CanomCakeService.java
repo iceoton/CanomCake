@@ -4,6 +4,7 @@ import com.iceoton.canomcake.model.GetAllCategoryResponse;
 import com.iceoton.canomcake.model.GetAllProductResponse;
 import com.iceoton.canomcake.model.GetProductByCategoryResponse;
 import com.iceoton.canomcake.model.GetProductByCodeResponse;
+import com.iceoton.canomcake.model.MakeOrderResponse;
 import com.iceoton.canomcake.model.UserLoginResponse;
 
 import retrofit2.Call;
@@ -16,7 +17,7 @@ public interface CanomCakeService {
     @FormUrlEncoded
     @POST("customerApi.php")
     Call<UserLoginResponse> loginToServer(@Field("tag") String tag,
-                                          @Field("data")String data);
+                                          @Field("data") String data);
 
     @FormUrlEncoded
     @POST("adminApi.php")
@@ -35,4 +36,8 @@ public interface CanomCakeService {
     @POST("customerApi.php")
     Call<GetProductByCodeResponse> loadProductByCode(@Field("tag") String tag,
                                                      @Field("data") String data);
+
+    @FormUrlEncoded
+    @POST("customerApi.php")
+    Call<MakeOrderResponse> makeOrderToServer(@Field("tag") String tag, @Field("data") String data);
 }

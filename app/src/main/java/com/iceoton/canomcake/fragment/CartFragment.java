@@ -21,9 +21,12 @@ import com.iceoton.canomcake.adapter.OrderItemListAdapter;
 import com.iceoton.canomcake.database.DatabaseDAO;
 import com.iceoton.canomcake.database.OrderItem;
 import com.iceoton.canomcake.model.GetProductByCodeResponse;
+import com.iceoton.canomcake.model.MakeOrderResponse;
 import com.iceoton.canomcake.model.Product;
 import com.iceoton.canomcake.service.CanomCakeService;
+import com.iceoton.canomcake.util.AppPreference;
 
+import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -72,7 +75,7 @@ public class CartFragment extends Fragment {
         loadItemCount = 0;
         products = new ArrayList<>(orderItems.size());
         Log.d("DEBUG", "Product lis size is " + products.size());
-        for(int i = 0; i < orderItems.size(); i++){
+        for (int i = 0; i < orderItems.size(); i++) {
             products.add(null); //initial list item in this position
             loadProductFromServer(i);
         }
@@ -81,13 +84,13 @@ public class CartFragment extends Fragment {
         btnMakeOrder.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Toast.makeText(getActivity(), "สั่งซื้อสินค้าเรียบร้อยแล้ว", Toast.LENGTH_SHORT).show();
+                sendMakeOrderToServer();
             }
         });
     }
 
-    private void initialActionBar(){
-        ActionBar mActionBar = ((CartActivity)getActivity()).getSupportActionBar();
+    private void initialActionBar() {
+        ActionBar mActionBar = ((CartActivity) getActivity()).getSupportActionBar();
         mActionBar.setCustomView(R.layout.custom_actionbar);
         mActionBar.setDisplayShowCustomEnabled(true);
         ImageView imageTitle = (ImageView) mActionBar.getCustomView().findViewById(R.id.image_title);
@@ -98,17 +101,17 @@ public class CartFragment extends Fragment {
                 getActivity().onBackPressed();
             }
         });
-        TextView titleBar = (TextView)mActionBar.getCustomView().findViewById(R.id.text_title);
+        TextView titleBar = (TextView) mActionBar.getCustomView().findViewById(R.id.text_title);
         FrameLayout containerCart = (FrameLayout) mActionBar.getCustomView()
                 .findViewById(R.id.container_cart);
         containerCart.setVisibility(View.GONE);
         titleBar.setText("สินค้าในรถเข็น");
     }
 
-    public void updateFooterView(){
+    public void updateFooterView() {
         int totalAmount = 0;
         double totalPrice = 0;
-        for (int i = 0; i < orderItems.size(); i++){
+        for (int i = 0; i < orderItems.size(); i++) {
             totalAmount += orderItems.get(i).getAmount();
             totalPrice += (orderItems.get(i).getAmount() * products.get(i).getPrice());
         }
@@ -142,7 +145,7 @@ public class CartFragment extends Fragment {
                     Log.d("DEBUG", "load image " + product.getNameThai() + "finish");
                     products.set(position, product);
                     loadItemCount++;
-                    if(loadItemCount == orderItems.size()){
+                    if (loadItemCount == orderItems.size()) {
                         // load all data finished.
                         OrderItemListAdapter itemListAdapter = new OrderItemListAdapter(getActivity(),
                                 orderItems, products, CartFragment.this);
@@ -159,5 +162,54 @@ public class CartFragment extends Fragment {
         });
     }
 
+    private void sendMakeOrderToServer() {
+        JSONArray detail = new JSONArray();
+        for (OrderItem orderItem : orderItems) {
+            try {
+                JSONObject item = new JSONObject();
+                item.put("product_code", orderItem.getProductCode());
+                item.put("amount", orderItem.getAmount());
+                detail.put(item);
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+        }
+        AppPreference appPreference = new AppPreference(getActivity());
+        JSONObject data = new JSONObject();
+        try {
+            data.put("customer_id", appPreference.getUserId());
+            data.put("detail", detail);
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+        Log.d("DEBUG", "make order request:" + data.toString());
+
+        Retrofit retrofit = new Retrofit.Builder()
+                .baseUrl(getResources().getString(R.string.api_url))
+                .addConverterFactory(GsonConverterFactory.create())
+                .build();
+
+        CanomCakeService canomCakeService = retrofit.create(CanomCakeService.class);
+        Call call = canomCakeService.makeOrderToServer("makeOrder", data.toString());
+        call.enqueue(new Callback<MakeOrderResponse>() {
+            @Override
+            public void onResponse(Call<MakeOrderResponse> call, Response<MakeOrderResponse> response) {
+                MakeOrderResponse makeOrderResponse = response.body();
+                if(makeOrderResponse.getSuccessValue() == 1){
+                    Toast.makeText(getActivity(), "สั่งซื้อสินค้าเรียบร้อยแล้ว", Toast.LENGTH_SHORT).show();
+                    DatabaseDAO databaseDAO = new DatabaseDAO(getActivity());
+                    databaseDAO.open();
+                    databaseDAO.clearOrderItem();
+                    databaseDAO.close();
+                    getActivity().onBackPressed();
+                }
+            }
+
+            @Override
+            public void onFailure(Call<MakeOrderResponse> call, Throwable t) {
+                Log.d("DEBUG", "Call CanomCake-API failure." + "\n" + t.getMessage());
+            }
+        });
+    }
 
 }

@@ -9,6 +9,7 @@ import android.support.v4.app.Fragment;
 import android.support.v4.content.ContextCompat;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.ActionBar;
+import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -80,12 +81,17 @@ public class MainFragment extends Fragment {
 
     private void initialView(View rootView, Bundle savedInstanceState) {
         ActionBar mActionBar = ((MainActivity)getActivity()).getSupportActionBar();
-        mActionBar.setCustomView(R.layout.custom_actionbar);
+        View customView = getLayoutInflater(savedInstanceState).inflate(R.layout.custom_actionbar, null);
+        mActionBar.setDisplayShowHomeEnabled(false);
         mActionBar.setDisplayShowCustomEnabled(true);
-        titleBar = (TextView)mActionBar.getCustomView().findViewById(R.id.text_title);
-        txtCountInCart = (TextView) mActionBar.getCustomView().findViewById(R.id.text_count);
-        FrameLayout containerCart = (FrameLayout) mActionBar.getCustomView()
-                .findViewById(R.id.container_cart);
+        mActionBar.setDisplayShowTitleEnabled(false);
+        mActionBar.setCustomView(customView);
+        Toolbar parent =(Toolbar) customView.getParent();
+        parent.setContentInsetsAbsolute(0,0);
+
+        titleBar = (TextView)customView.findViewById(R.id.text_title);
+        txtCountInCart = (TextView) customView.findViewById(R.id.text_count);
+        FrameLayout containerCart = (FrameLayout) customView.findViewById(R.id.container_cart);
         containerCart.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

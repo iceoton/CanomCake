@@ -4,6 +4,7 @@ package com.iceoton.canomcake.fragment;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v7.app.ActionBar;
+import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -56,7 +57,7 @@ public class CartFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View rootView = inflater.inflate(R.layout.fragment_cart, container, false);
-        initialActionBar();
+        initialActionBar(savedInstanceState);
         initialView(rootView);
 
         return rootView;
@@ -89,11 +90,17 @@ public class CartFragment extends Fragment {
         });
     }
 
-    private void initialActionBar() {
+    private void initialActionBar(Bundle savedInstanceState) {
         ActionBar mActionBar = ((CartActivity) getActivity()).getSupportActionBar();
-        mActionBar.setCustomView(R.layout.custom_actionbar);
+        View customView = getLayoutInflater(savedInstanceState).inflate(R.layout.custom_actionbar, null);
+        mActionBar.setDisplayShowHomeEnabled(false);
         mActionBar.setDisplayShowCustomEnabled(true);
-        ImageView imageTitle = (ImageView) mActionBar.getCustomView().findViewById(R.id.image_title);
+        mActionBar.setDisplayShowTitleEnabled(false);
+        mActionBar.setCustomView(customView);
+        Toolbar parent =(Toolbar) customView.getParent();
+        parent.setContentInsetsAbsolute(0,0);
+
+        ImageView imageTitle = (ImageView) customView.findViewById(R.id.image_title);
         imageTitle.setImageResource(R.drawable.arrow_back);
         imageTitle.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -101,11 +108,11 @@ public class CartFragment extends Fragment {
                 getActivity().onBackPressed();
             }
         });
-        TextView titleBar = (TextView) mActionBar.getCustomView().findViewById(R.id.text_title);
-        FrameLayout containerCart = (FrameLayout) mActionBar.getCustomView()
-                .findViewById(R.id.container_cart);
-        containerCart.setVisibility(View.GONE);
+        TextView titleBar = (TextView) customView.findViewById(R.id.text_title);
+        FrameLayout containerCart = (FrameLayout) customView.findViewById(R.id.container_cart);
+        containerCart.removeAllViews();
         titleBar.setText("สินค้าในรถเข็น");
+
     }
 
     public void updateFooterView() {

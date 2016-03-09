@@ -15,11 +15,13 @@ import android.widget.Toast;
 
 import com.iceoton.canomcake.R;
 import com.iceoton.canomcake.activity.LoginActivity;
+import com.iceoton.canomcake.activity.MainActivity;
 import com.iceoton.canomcake.adapter.AccountMenuListAdapter;
 import com.iceoton.canomcake.util.AppPreference;
 
 public class AccountFragment extends Fragment {
     ListView listAccountMenu;
+    String[] menuNameArray;
 
     public static Fragment newInstance() {
         AccountFragment fragment = new AccountFragment();
@@ -38,22 +40,26 @@ public class AccountFragment extends Fragment {
     private void initialView(View rootView){
         listAccountMenu = (ListView)rootView.findViewById(R.id.list_account_menu);
         int[] imageIcon = getImageArray(R.array.account_menu_icon, R.mipmap.ic_launcher);
-        String[] textName = getStringArray(R.array.account_menu_name);
+        menuNameArray = getStringArray(R.array.account_menu_name);
         AccountMenuListAdapter accountMenuListAdapter
-                = new AccountMenuListAdapter(getActivity(), textName, imageIcon);
+                = new AccountMenuListAdapter(getActivity(), menuNameArray, imageIcon);
         listAccountMenu.setAdapter(accountMenuListAdapter);
         listAccountMenu.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                eventItemClick(id);
+                eventItemClick(id, position);
             }
         });
     }
 
-    private void eventItemClick(long id){
+    private void eventItemClick(long id, int position){
         Log.d("DEBUG", "Click account menu id=" + id);
         AppPreference appPreference  = new AppPreference(getActivity());
-        if(id == R.drawable.logout_icon){
+        if(id == R.drawable.history_icon){
+            Bundle args = new Bundle();
+            args.putString("title", menuNameArray[position]);
+            ((MainActivity) getActivity()).placeFragmentToContrainer(HistoryFragment.newInstance(args));
+        }else if(id == R.drawable.logout_icon){
             appPreference.saveLoginStatus(false);
             Intent intentToLogin = new Intent(getActivity(), LoginActivity.class);
             startActivity(intentToLogin);

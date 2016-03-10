@@ -49,7 +49,7 @@ public class CategoryListAdapter extends BaseAdapter {
         // reuse views
         if (convertView == null) {
             LayoutInflater inflater = (LayoutInflater) mContext.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-            convertView = inflater.inflate(R.layout.category_list_item, parent, false);
+            convertView = inflater.inflate(R.layout.item_category_list, parent, false);
             viewHolder = new ViewHolder();
             viewHolder.imageViewCategory = (ImageView) convertView.findViewById(R.id.image_category);
             viewHolder.textCategoryName = (TextView)convertView.findViewById(R.id.text_name);

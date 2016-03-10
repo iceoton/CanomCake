@@ -5,22 +5,42 @@ import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v7.app.ActionBar;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
+import android.widget.ListView;
 import android.widget.TextView;
 
 import com.iceoton.canomcake.R;
 import com.iceoton.canomcake.activity.CartActivity;
 import com.iceoton.canomcake.activity.MainActivity;
+import com.iceoton.canomcake.adapter.HistoryItemListAdapter;
+import com.iceoton.canomcake.model.GetOrderByCustomerResponse;
+import com.iceoton.canomcake.model.HistoryOrder;
+import com.iceoton.canomcake.service.CanomCakeService;
+import com.iceoton.canomcake.util.AppPreference;
 import com.iceoton.canomcake.util.CartManagement;
+
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.util.ArrayList;
+
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
+import retrofit2.Retrofit;
+import retrofit2.converter.gson.GsonConverterFactory;
 
 public class HistoryFragment extends Fragment {
     TextView txtCountInCart;
+    ListView listViewHistory;
 
-    public static HistoryFragment newInstance(Bundle args){
+    public static HistoryFragment newInstance(Bundle args) {
         HistoryFragment fragment = new HistoryFragment();
         fragment.setArguments(args);
         return fragment;
@@ -35,8 +55,7 @@ public class HistoryFragment extends Fragment {
         return rootView;
     }
 
-    private void initialView(View rootView) {
-
+    private void initialActionBar() {
         ActionBar mActionBar = ((MainActivity) getActivity()).getSupportActionBar();
         ImageView imageTitle = (ImageView) mActionBar.getCustomView().findViewById(R.id.image_title);
         imageTitle.setImageResource(R.drawable.arrow_back);
@@ -60,10 +79,57 @@ public class HistoryFragment extends Fragment {
         });
     }
 
+    private void initialView(View rootView) {
+        initialActionBar();
+
+        listViewHistory = (ListView) rootView.findViewById(R.id.list_history);
+        loadHistory();
+    }
+
     @Override
     public void onResume() {
         super.onResume();
         final CartManagement cartManagement = new CartManagement(getActivity());
         cartManagement.loadCountInto(txtCountInCart);
+    }
+
+    private void loadHistory() {
+        AppPreference appPreference = new AppPreference(getActivity());
+        JSONObject data = new JSONObject();
+        try {
+            data.put("customer_id", appPreference.getUserId());
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+
+        Retrofit retrofit = new Retrofit.Builder()
+                .baseUrl(getResources().getString(R.string.api_url))
+                .addConverterFactory(GsonConverterFactory.create())
+                .build();
+        CanomCakeService canomCakeService = retrofit.create(CanomCakeService.class);
+        Call call = canomCakeService.loadOrderByCustomerId("getOrderByCustomerID", data.toString());
+        call.enqueue(new Callback<GetOrderByCustomerResponse>() {
+            @Override
+            public void onResponse(Call<GetOrderByCustomerResponse> call,
+                                   Response<GetOrderByCustomerResponse> response) {
+                ArrayList<HistoryOrder> historyOrders = response.body().getResult();
+                if (historyOrders != null) {
+                    Log.d("DEBUG", "The Number of history = " + historyOrders.size());
+                    HistoryItemListAdapter historyItemListAdapter = new HistoryItemListAdapter(getActivity(), historyOrders);
+                    listViewHistory.setAdapter(historyItemListAdapter);
+                    listViewHistory.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+                        @Override
+                        public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+
+                        }
+                    });
+                }
+            }
+
+            @Override
+            public void onFailure(Call<GetOrderByCustomerResponse> call, Throwable t) {
+                Log.d("DEBUG", "Call CanomCake-API failure." + "\n" + t.getMessage());
+            }
+        });
     }
 }

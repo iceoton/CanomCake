@@ -46,7 +46,7 @@ public class AccountMenuListAdapter extends BaseAdapter {
         ViewHolder viewHolder;
         if(convertView == null) {
             LayoutInflater inflater = (LayoutInflater) mContext.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-            convertView = inflater.inflate(R.layout.account_menu_item, parent, false);
+            convertView = inflater.inflate(R.layout.item_account_menu, parent, false);
             viewHolder = new ViewHolder();
             viewHolder.imageIcon = (ImageView) convertView.findViewById(R.id.image_icon);
             viewHolder.textName = (TextView) convertView.findViewById(R.id.text_name);

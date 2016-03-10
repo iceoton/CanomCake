@@ -100,7 +100,6 @@ public class DatabaseDAO {
     }
 
     public void clearOrderItem() {
-        //Delete all row out of Pre-Order table
         database.delete(OrderItemTable.TABLE_NAME, null, null);
     }
 

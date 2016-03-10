@@ -20,4 +20,5 @@
         <item>@drawable/manage_acount_icon</item>
         <item>@drawable/logout_icon</item>
     </string-array>
+
 </resources>

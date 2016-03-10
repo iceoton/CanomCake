@@ -2,4 +2,9 @@
     <string name="api_url">http://188.166.218.45/</string>
     <string name="app_name">Canom Cake</string>
     <string name="press_one_again">กดอีกครั้งเพื่อออกจากแอพ</string>
+    <string name="order_status_waiting">รอดำเนินการ</string>
+    <string name="order_status_canceled">ยกเลิก</string>
+    <string name="order_status_paid">ชำระเงินแล้ว</string>
+    <string name="order_status_delivering">กำลังจัดส่ง</string>
+    <string name="order_status_delivered">จัดส่งแล้ว</string>
 </resources>

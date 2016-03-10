@@ -70,7 +70,7 @@ public class CartFragment extends Fragment {
         databaseDAO.close();
 
         listOrderItem = (ListView) rootView.findViewById(R.id.list_item);
-        footerView = getLayoutInflater(null).inflate(R.layout.footer_list_of_item, null, false);
+        footerView = getLayoutInflater(null).inflate(R.layout.footer_fragment_cart, null, false);
         listOrderItem.addFooterView(footerView);
 
         loadItemCount = 0;

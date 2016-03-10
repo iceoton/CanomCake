@@ -5,6 +5,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v7.app.ActionBar;
+import android.support.v7.widget.Toolbar;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -52,7 +53,7 @@ public class ProductDetailFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View rootView = inflater.inflate(R.layout.fragment_product_detail, container, false);
-        initialView(rootView);
+        initialView(rootView, savedInstanceState);
 
         return rootView;
     }
@@ -64,7 +65,7 @@ public class ProductDetailFragment extends Fragment {
         cartManagement.loadCountInto(txtCountInCart);
     }
 
-    private void initialView(View rootView) {
+    private void initialView(View rootView, Bundle savedInstanceState) {
         Bundle args = getArguments();
         String productCode = args.getString("product_code");
         ivPhoto = (ImageView) rootView.findViewById(R.id.image_photo);
@@ -75,9 +76,15 @@ public class ProductDetailFragment extends Fragment {
         btnAddToCart = (Button) rootView.findViewById(R.id.btn_add_to_cart);
 
         ActionBar mActionBar = ((ProductDetailActivity) getActivity()).getSupportActionBar();
-        mActionBar.setCustomView(R.layout.custom_actionbar);
+        View customView = getLayoutInflater(savedInstanceState).inflate(R.layout.custom_actionbar, null);
+        mActionBar.setDisplayShowHomeEnabled(false);
         mActionBar.setDisplayShowCustomEnabled(true);
-        ImageView imageTitle = (ImageView) mActionBar.getCustomView().findViewById(R.id.image_title);
+        mActionBar.setDisplayShowTitleEnabled(false);
+        mActionBar.setCustomView(customView);
+        Toolbar parent =(Toolbar) customView.getParent();
+        parent.setContentInsetsAbsolute(0,0);
+
+        ImageView imageTitle = (ImageView) customView.findViewById(R.id.image_title);
         imageTitle.setImageResource(R.drawable.arrow_back);
         imageTitle.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -85,10 +92,9 @@ public class ProductDetailFragment extends Fragment {
                 getActivity().onBackPressed();
             }
         });
-        titleBar = (TextView) mActionBar.getCustomView().findViewById(R.id.text_title);
+        titleBar = (TextView) customView.findViewById(R.id.text_title);
         txtCountInCart = (TextView) mActionBar.getCustomView().findViewById(R.id.text_count);
-        FrameLayout containerCart = (FrameLayout) mActionBar.getCustomView()
-                .findViewById(R.id.container_cart);
+        FrameLayout containerCart = (FrameLayout) customView.findViewById(R.id.container_cart);
         containerCart.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

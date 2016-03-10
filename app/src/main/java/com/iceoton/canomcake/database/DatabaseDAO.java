@@ -49,14 +49,37 @@ public class DatabaseDAO {
         return orderItems;
     }
 
-    public void addOrderItem(OrderItem orderItem) {
-        ContentValues values = orderItem.toContentValues();
-        long insertIndex = database.insert(OrderItemTable.TABLE_NAME, null, values);
+    public OrderItem readOrderItemByProductCode(String productCode){
+        String sql = "SELECT * FROM " + OrderItemTable.TABLE_NAME
+                + " WHERE " + OrderItemTable.Columns._PRODUCT_CODE + "=?";
+        String[] selectArgs = {productCode};
+        Cursor cursor = database.rawQuery(sql, selectArgs);
 
-        if (insertIndex == -1) {
-            Log.d(TAG, "An error occurred on inserting order item table.");
+        OrderItem orderItem = null;
+        if(cursor.getCount() > 0){
+            cursor.moveToFirst();
+            orderItem = new OrderItem();
+            orderItem.fromCursor(cursor);
+        }
+        cursor.close();
+
+        return orderItem;
+    }
+
+    public void addOrderItem(OrderItem orderItem) {
+        OrderItem itemInDb = readOrderItemByProductCode(orderItem.getProductCode());
+        if (itemInDb != null){
+            itemInDb.setAmount(itemInDb.getAmount() + 1);
+            updateOrderItemByValues(itemInDb.getId(), itemInDb.toContentValues());
         } else {
-            Log.d(TAG, "insert order item successful.");
+            ContentValues values = orderItem.toContentValues();
+            long insertIndex = database.insert(OrderItemTable.TABLE_NAME, null, values);
+
+            if (insertIndex == -1) {
+                Log.d(TAG, "An error occurred on inserting order item table.");
+            } else {
+                Log.d(TAG, "insert order item successful.");
+            }
         }
     }
 

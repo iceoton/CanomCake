@@ -1,10 +1,10 @@
-package com.iceoton.canomcake.model;
+package com.iceoton.canomcake.model.response;
 
 import com.google.gson.annotations.Expose;
+import com.iceoton.canomcake.model.User;
 
-import java.util.ArrayList;
 
-public class GetOrderByCustomerResponse {
+public class UserLoginResponse {
     @Expose
     int success;
     @Expose
@@ -12,7 +12,7 @@ public class GetOrderByCustomerResponse {
     @Expose
     String error_msg;
     @Expose
-    ArrayList<HistoryOrder> result;
+    User result;
 
     public int getSuccessValue() {
         return success;
@@ -26,7 +26,7 @@ public class GetOrderByCustomerResponse {
         return error_msg;
     }
 
-    public ArrayList<HistoryOrder> getResult() {
+    public User getUser() {
         return result;
     }
 }

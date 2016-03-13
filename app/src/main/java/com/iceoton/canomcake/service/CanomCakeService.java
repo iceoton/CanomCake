@@ -1,13 +1,14 @@
 package com.iceoton.canomcake.service;
 
-import com.iceoton.canomcake.model.GetAllCategoryResponse;
-import com.iceoton.canomcake.model.GetAllProductResponse;
-import com.iceoton.canomcake.model.GetOrderByCustomerResponse;
-import com.iceoton.canomcake.model.GetOrderByIdResponse;
-import com.iceoton.canomcake.model.GetProductByCategoryResponse;
-import com.iceoton.canomcake.model.GetProductByCodeResponse;
-import com.iceoton.canomcake.model.MakeOrderResponse;
-import com.iceoton.canomcake.model.UserLoginResponse;
+import com.iceoton.canomcake.model.response.GetAllCategoryResponse;
+import com.iceoton.canomcake.model.response.GetAllProductResponse;
+import com.iceoton.canomcake.model.response.GetCustomerResponse;
+import com.iceoton.canomcake.model.response.GetOrderByCustomerResponse;
+import com.iceoton.canomcake.model.response.GetOrderByIdResponse;
+import com.iceoton.canomcake.model.response.GetProductByCategoryResponse;
+import com.iceoton.canomcake.model.response.GetProductByCodeResponse;
+import com.iceoton.canomcake.model.response.MakeOrderResponse;
+import com.iceoton.canomcake.model.response.UserLoginResponse;
 
 import retrofit2.Call;
 import retrofit2.http.Field;
@@ -50,4 +51,9 @@ public interface CanomCakeService {
     @FormUrlEncoded
     @POST("adminApi.php")
     Call<GetOrderByIdResponse> loadOrderByOrderId(@Field("tag")String tag, @Field("data")String data);
+
+    @FormUrlEncoded
+    @POST("adminApi.php")
+    Call<GetCustomerResponse> loadCustomerByCustomerId(@Field("tag")String tag, @Field("data")String data);
+
 }

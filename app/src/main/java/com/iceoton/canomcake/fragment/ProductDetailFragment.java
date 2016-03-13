@@ -20,8 +20,8 @@ import com.iceoton.canomcake.activity.CartActivity;
 import com.iceoton.canomcake.activity.ProductDetailActivity;
 import com.iceoton.canomcake.database.DatabaseDAO;
 import com.iceoton.canomcake.database.OrderItem;
-import com.iceoton.canomcake.model.GetProductByCodeResponse;
 import com.iceoton.canomcake.model.Product;
+import com.iceoton.canomcake.model.response.GetProductByCodeResponse;
 import com.iceoton.canomcake.service.CanomCakeService;
 import com.iceoton.canomcake.util.CartManagement;
 

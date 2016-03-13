@@ -17,8 +17,8 @@ import android.widget.TextView;
 import com.iceoton.canomcake.R;
 import com.iceoton.canomcake.activity.OrderDetailActivity;
 import com.iceoton.canomcake.adapter.OrderDetailListAdapter;
-import com.iceoton.canomcake.model.GetOrderByIdResponse;
 import com.iceoton.canomcake.model.OrderDetail;
+import com.iceoton.canomcake.model.response.GetOrderByIdResponse;
 import com.iceoton.canomcake.service.CanomCakeService;
 
 import org.json.JSONException;

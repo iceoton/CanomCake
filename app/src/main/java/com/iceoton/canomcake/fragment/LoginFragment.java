@@ -15,7 +15,7 @@ import android.widget.Toast;
 import com.iceoton.canomcake.R;
 import com.iceoton.canomcake.activity.MainActivity;
 import com.iceoton.canomcake.model.User;
-import com.iceoton.canomcake.model.UserLoginResponse;
+import com.iceoton.canomcake.model.response.UserLoginResponse;
 import com.iceoton.canomcake.service.CanomCakeService;
 import com.iceoton.canomcake.util.AppPreference;
 

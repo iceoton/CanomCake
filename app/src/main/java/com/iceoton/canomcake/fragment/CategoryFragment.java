@@ -14,7 +14,7 @@ import com.iceoton.canomcake.R;
 import com.iceoton.canomcake.activity.MainActivity;
 import com.iceoton.canomcake.adapter.CategoryListAdapter;
 import com.iceoton.canomcake.model.Category;
-import com.iceoton.canomcake.model.GetAllCategoryResponse;
+import com.iceoton.canomcake.model.response.GetAllCategoryResponse;
 import com.iceoton.canomcake.service.CanomCakeService;
 
 import java.util.ArrayList;

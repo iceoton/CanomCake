@@ -21,9 +21,9 @@ import com.iceoton.canomcake.activity.CartActivity;
 import com.iceoton.canomcake.adapter.OrderItemListAdapter;
 import com.iceoton.canomcake.database.DatabaseDAO;
 import com.iceoton.canomcake.database.OrderItem;
-import com.iceoton.canomcake.model.GetProductByCodeResponse;
-import com.iceoton.canomcake.model.MakeOrderResponse;
 import com.iceoton.canomcake.model.Product;
+import com.iceoton.canomcake.model.response.GetProductByCodeResponse;
+import com.iceoton.canomcake.model.response.MakeOrderResponse;
 import com.iceoton.canomcake.service.CanomCakeService;
 import com.iceoton.canomcake.util.AppPreference;
 

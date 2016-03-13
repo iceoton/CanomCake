@@ -1,10 +1,11 @@
-package com.iceoton.canomcake.model;
+package com.iceoton.canomcake.model.response;
 
 import com.google.gson.annotations.Expose;
+import com.iceoton.canomcake.model.Product;
 
 import java.util.ArrayList;
 
-public class GetAllProductResponse {
+public class GetProductByCategoryResponse {
     @Expose
     int success;
     @Expose

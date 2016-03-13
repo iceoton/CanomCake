@@ -1,10 +1,9 @@
-package com.iceoton.canomcake.model;
+package com.iceoton.canomcake.model.response;
 
 import com.google.gson.annotations.Expose;
+import com.iceoton.canomcake.model.Product;
 
-import java.util.ArrayList;
-
-public class GetProductByCategoryResponse {
+public class GetProductByCodeResponse {
     @Expose
     int success;
     @Expose
@@ -12,7 +11,7 @@ public class GetProductByCategoryResponse {
     @Expose
     String error_msg;
     @Expose
-    ArrayList<Product> result;
+    Product result;
 
     public int getSuccess() {
         return success;
@@ -26,7 +25,7 @@ public class GetProductByCategoryResponse {
         return error_msg;
     }
 
-    public ArrayList<Product> getResult() {
+    public Product getResult() {
         return result;
     }
 }

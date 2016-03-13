@@ -1,14 +1,18 @@
-package com.iceoton.canomcake.model;
+package com.iceoton.canomcake.model.response;
+
 
 import com.google.gson.annotations.Expose;
+import com.iceoton.canomcake.model.User;
 
-public class MakeOrderResponse {
+public class GetCustomerResponse {
     @Expose
     int success;
     @Expose
     int error;
     @Expose
     String error_msg;
+    @Expose
+    User result;
 
     public int getSuccessValue() {
         return success;
@@ -20,5 +24,9 @@ public class MakeOrderResponse {
 
     public String getErrorMessage() {
         return error_msg;
+    }
+
+    public User getResult() {
+        return result;
     }
 }

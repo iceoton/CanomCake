@@ -19,9 +19,9 @@ import com.iceoton.canomcake.R;
 import com.iceoton.canomcake.activity.CartActivity;
 import com.iceoton.canomcake.activity.MainActivity;
 import com.iceoton.canomcake.adapter.RecyclerViewAdapter;
-import com.iceoton.canomcake.model.GetAllProductResponse;
-import com.iceoton.canomcake.model.GetProductByCategoryResponse;
 import com.iceoton.canomcake.model.Product;
+import com.iceoton.canomcake.model.response.GetAllProductResponse;
+import com.iceoton.canomcake.model.response.GetProductByCategoryResponse;
 import com.iceoton.canomcake.service.CanomCakeService;
 import com.iceoton.canomcake.util.CartManagement;
 

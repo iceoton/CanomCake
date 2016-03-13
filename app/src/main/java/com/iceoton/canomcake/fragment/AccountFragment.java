@@ -37,8 +37,8 @@ public class AccountFragment extends Fragment {
         return rootView;
     }
 
-    private void initialView(View rootView){
-        listAccountMenu = (ListView)rootView.findViewById(R.id.list_account_menu);
+    private void initialView(View rootView) {
+        listAccountMenu = (ListView) rootView.findViewById(R.id.list_account_menu);
         int[] imageIcon = getImageArray(R.array.account_menu_icon, R.mipmap.ic_launcher);
         menuNameArray = getStringArray(R.array.account_menu_name);
         AccountMenuListAdapter accountMenuListAdapter
@@ -52,14 +52,26 @@ public class AccountFragment extends Fragment {
         });
     }
 
-    private void eventItemClick(long id, int position){
+    private void eventItemClick(long id, int position) {
         Log.d("DEBUG", "Click account menu id=" + id);
-        AppPreference appPreference  = new AppPreference(getActivity());
-        if(id == R.drawable.history_icon){
+        AppPreference appPreference = new AppPreference(getActivity());
+        if (id == R.drawable.history_icon) {
             Bundle args = new Bundle();
             args.putString("title", menuNameArray[position]);
             ((MainActivity) getActivity()).placeFragmentToContrainer(HistoryFragment.newInstance(args));
-        }else if(id == R.drawable.logout_icon){
+        } else if (id == R.drawable.notification_icon) {
+            Bundle args = new Bundle();
+            args.putString("title", menuNameArray[position]);
+            ((MainActivity) getActivity()).placeFragmentToContrainer(NotificationFragment.newInstance(args));
+        } else if (id == R.drawable.payment_confirm_icon) {
+            Bundle args = new Bundle();
+            args.putString("title", menuNameArray[position]);
+            ((MainActivity) getActivity()).placeFragmentToContrainer(PaymentConfirmFragment.newInstance(args));
+        } else if (id == R.drawable.manage_acount_icon) {
+            Bundle args = new Bundle();
+            args.putString("title", menuNameArray[position]);
+            ((MainActivity) getActivity()).placeFragmentToContrainer(ManageAccountFragment.newInstance(args));
+        } else if (id == R.drawable.logout_icon) {
             appPreference.saveLoginStatus(false);
             Intent intentToLogin = new Intent(getActivity(), LoginActivity.class);
             startActivity(intentToLogin);
@@ -72,7 +84,7 @@ public class AccountFragment extends Fragment {
     public int[] getImageArray(int resId, int defResId) {
         TypedArray my_image_array = getResources().obtainTypedArray(resId);
         int[] array_res = new int[my_image_array.length()];
-        for(int i = 0 ; i < array_res.length ; i++)
+        for (int i = 0; i < array_res.length; i++)
             array_res[i] = my_image_array.getResourceId(i, defResId);
         my_image_array.recycle();
         return array_res;
@@ -81,7 +93,7 @@ public class AccountFragment extends Fragment {
     public String[] getStringArray(int resId) {
         TypedArray my_string_array = getResources().obtainTypedArray(resId);
         String[] array_string = new String[my_string_array.length()];
-        for(int i = 0 ; i < array_string.length ; i++)
+        for (int i = 0; i < array_string.length; i++)
             array_string[i] = my_string_array.getString(i);
         my_string_array.recycle();
         return array_string;

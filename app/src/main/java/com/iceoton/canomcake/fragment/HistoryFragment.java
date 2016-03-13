@@ -18,6 +18,7 @@ import android.widget.TextView;
 import com.iceoton.canomcake.R;
 import com.iceoton.canomcake.activity.CartActivity;
 import com.iceoton.canomcake.activity.MainActivity;
+import com.iceoton.canomcake.activity.OrderDetailActivity;
 import com.iceoton.canomcake.adapter.HistoryItemListAdapter;
 import com.iceoton.canomcake.model.GetOrderByCustomerResponse;
 import com.iceoton.canomcake.model.HistoryOrder;
@@ -120,7 +121,7 @@ public class HistoryFragment extends Fragment {
                     listViewHistory.setOnItemClickListener(new AdapterView.OnItemClickListener() {
                         @Override
                         public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-
+                            showOrderHistoryDetail((int)id);
                         }
                     });
                 }
@@ -131,5 +132,11 @@ public class HistoryFragment extends Fragment {
                 Log.d("DEBUG", "Call CanomCake-API failure." + "\n" + t.getMessage());
             }
         });
+    }
+
+    private void showOrderHistoryDetail(int orderId){
+        Intent intent = new Intent(getActivity(), OrderDetailActivity.class);
+        intent.putExtra("order_id", orderId);
+        getActivity().startActivity(intent);
     }
 }

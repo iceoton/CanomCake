@@ -57,15 +57,16 @@ public class CategoryFragment extends Fragment {
             public void onResponse(Call<GetAllCategoryResponse> call, Response<GetAllCategoryResponse> response) {
                 Log.d("DEBUG", "Number of category = " + response.body().getResult().size());
                 final ArrayList<Category> categories = response.body().getResult();
-                CategoryListAdapter categoryListAdapter
-                        = new CategoryListAdapter(getContext(), categories);
-                listViewCategory.setAdapter(categoryListAdapter);
-                listViewCategory.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-                    @Override
-                    public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                        showProductByCategory(categories.get(position));
-                    }
-                });
+                if (categories != null) {
+                    CategoryListAdapter categoryListAdapter = new CategoryListAdapter(getContext(), categories);
+                    listViewCategory.setAdapter(categoryListAdapter);
+                    listViewCategory.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+                        @Override
+                        public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                            showProductByCategory(categories.get(position));
+                        }
+                    });
+                }
             }
 
             @Override

@@ -3,6 +3,7 @@ package com.iceoton.canomcake.service;
 import com.iceoton.canomcake.model.GetAllCategoryResponse;
 import com.iceoton.canomcake.model.GetAllProductResponse;
 import com.iceoton.canomcake.model.GetOrderByCustomerResponse;
+import com.iceoton.canomcake.model.GetOrderByIdResponse;
 import com.iceoton.canomcake.model.GetProductByCategoryResponse;
 import com.iceoton.canomcake.model.GetProductByCodeResponse;
 import com.iceoton.canomcake.model.MakeOrderResponse;
@@ -45,4 +46,8 @@ public interface CanomCakeService {
     @FormUrlEncoded
     @POST("customerApi.php")
     Call<GetOrderByCustomerResponse>  loadOrderByCustomerId(@Field("tag")String tag, @Field("data")String data);
+
+    @FormUrlEncoded
+    @POST("adminApi.php")
+    Call<GetOrderByIdResponse> loadOrderByOrderId(@Field("tag")String tag, @Field("data")String data);
 }

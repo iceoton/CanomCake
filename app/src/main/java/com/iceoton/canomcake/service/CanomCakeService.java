@@ -1,5 +1,6 @@
 package com.iceoton.canomcake.service;
 
+import com.iceoton.canomcake.model.response.EditCustomerResponse;
 import com.iceoton.canomcake.model.response.GetAllCategoryResponse;
 import com.iceoton.canomcake.model.response.GetAllProductResponse;
 import com.iceoton.canomcake.model.response.GetCustomerResponse;
@@ -56,4 +57,7 @@ public interface CanomCakeService {
     @POST("adminApi.php")
     Call<GetCustomerResponse> loadCustomerByCustomerId(@Field("tag")String tag, @Field("data")String data);
 
+    @FormUrlEncoded
+    @POST("customerApi.php")
+    Call<EditCustomerResponse> editCustomerProfile(@Field("tag")String tag, @Field("data")String data);
 }

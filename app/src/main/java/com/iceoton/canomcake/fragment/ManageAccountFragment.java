@@ -1,6 +1,8 @@
 package com.iceoton.canomcake.fragment;
 
 
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -19,6 +21,7 @@ import com.iceoton.canomcake.R;
 import com.iceoton.canomcake.activity.CartActivity;
 import com.iceoton.canomcake.activity.MainActivity;
 import com.iceoton.canomcake.model.User;
+import com.iceoton.canomcake.model.response.EditCustomerResponse;
 import com.iceoton.canomcake.model.response.GetCustomerResponse;
 import com.iceoton.canomcake.service.CanomCakeService;
 import com.iceoton.canomcake.util.AppPreference;
@@ -90,6 +93,12 @@ public class ManageAccountFragment extends Fragment {
         etEmail = (EditText) rootView.findViewById(R.id.edit_email);
         etAddress = (EditText) rootView.findViewById(R.id.edit_address);
         btnEdit = (Button) rootView.findViewById(R.id.button_edit);
+        btnEdit.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                updateUserInfo();
+            }
+        });
 
         loadProfileInfoFromServer();
     }
@@ -133,7 +142,7 @@ public class ManageAccountFragment extends Fragment {
         });
     }
 
-    private void showUserInfo(final User user){
+    private void showUserInfo(final User user) {
         int cutIndex = user.getFullname().indexOf(",");
         String name = user.getFullname().substring(0, cutIndex);
         String surname = user.getFullname().substring(cutIndex + 1, user.getFullname().length());
@@ -143,17 +152,67 @@ public class ManageAccountFragment extends Fragment {
         etEmail.setText(user.getEmail());
         etEmail.setEnabled(false);
         etAddress.setText(user.getAddress());
-        btnEdit.setOnClickListener(new View.OnClickListener() {
+    }
+
+
+    private void updateUserInfo() {
+        AppPreference appPreference = new AppPreference(getActivity());
+        JSONObject data = new JSONObject();
+        try {
+            data.put("customer_id", appPreference.getUserId());
+            String fullName = etName.getText().toString().trim() + "," + etSurname.getText().toString().trim();
+            data.put("fullname", fullName);
+            data.put("phone_number", etMobile.getText().toString().trim());
+            data.put("address", etAddress.getText().toString().trim());
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+
+        Log.d("DEBUG", "JSON to update profile: " + data.toString());
+        Retrofit retrofit = new Retrofit.Builder()
+                .baseUrl(getResources().getString(R.string.api_url))
+                .addConverterFactory(GsonConverterFactory.create())
+                .build();
+
+        CanomCakeService canomCakeService = retrofit.create(CanomCakeService.class);
+        Call call = canomCakeService.editCustomerProfile("editCustomer", data.toString());
+        call.enqueue(new Callback<EditCustomerResponse>() {
             @Override
-            public void onClick(View v) {
-                updateUserInfo(user);
+            public void onResponse(Call<EditCustomerResponse> call, Response<EditCustomerResponse> response) {
+                if (response.body().getSuccessValue() == 1) {
+                    showAlertDialog("การปรับปรุงข้อมูล", "ทำการปรับปรุงข้อมูลเรียบร้อยแล้ว");
+                } else {
+                    Log.d("DEBUG", "error message = " + response.body().getErrorMessage());
+                }
+            }
+
+            @Override
+            public void onFailure(Call<EditCustomerResponse> call, Throwable t) {
+                Log.d("DEBUG", "Call CanomCake-API failure." + "\n" + t.getMessage());
             }
         });
     }
 
+    /**
+     * Function to display simple Alert Dialog
+     *
+     * @param title   - alert dialog title
+     * @param message - alert message
+     */
+    public void showAlertDialog(String title, String message) {
+        final AlertDialog alertDialog = new AlertDialog.Builder(getActivity()).create();
 
-    private void updateUserInfo(User user){
-        
+        alertDialog.setTitle(title);
+        alertDialog.setMessage(message);
+        alertDialog.setIcon(R.mipmap.ic_launcher);
+        alertDialog.setCanceledOnTouchOutside(false);
+        alertDialog.setButton(DialogInterface.BUTTON_POSITIVE, "ตกลง", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                alertDialog.cancel();
+            }
+        });
+        alertDialog.show();
     }
 
 }

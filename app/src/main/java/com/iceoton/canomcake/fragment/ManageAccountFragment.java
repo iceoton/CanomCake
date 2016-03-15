@@ -159,7 +159,7 @@ public class ManageAccountFragment extends Fragment {
         AppPreference appPreference = new AppPreference(getActivity());
         JSONObject data = new JSONObject();
         try {
-            data.put("customer_id", appPreference.getUserId());
+            data.put("id", appPreference.getUserId());
             String fullName = etName.getText().toString().trim() + "," + etSurname.getText().toString().trim();
             data.put("fullname", fullName);
             data.put("phone_number", etMobile.getText().toString().trim());

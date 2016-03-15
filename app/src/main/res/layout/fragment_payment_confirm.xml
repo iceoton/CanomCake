@@ -1,8 +1,168 @@
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="com.iceoton.canomcake.fragment.ManageAccountFragment">
+    tools:context="com.iceoton.canomcake.fragment.PaymentConfirmFragment">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        android:padding="8dp">
+
+        <TextView
+            style="@style/Text.Body"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:paddingBottom="8dp"
+            android:paddingTop="8dp"
+            android:text="กรุณากรอกข้อมูลต่อไปนี้" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:padding="8dp">
+
+            <TextView
+                style="@style/Text.Body"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="ชื่อธนาคาร: " />
+
+            <Spinner
+                android:id="@+id/spinner_bank_name"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@color/gray"
+                android:padding="8dp"
+                tools:listitem="@android:layout/simple_spinner_item" />
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:padding="8dp">
+
+            <TextView
+                style="@style/Text.Body"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="จำนวนเงินที่โอน: " />
+
+            <EditText
+                android:id="@+id/edit_monty"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:gravity="right"
+                android:hint="0.00"
+                android:inputType="numberDecimal" />
+
+            <TextView
+                style="@style/Text.Body"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:paddingLeft="8dp"
+                android:text="บาท" />
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:padding="8dp">
+
+            <TextView
+                style="@style/Text.Body"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="วันที่โอนเงิน: " />
+
+            <EditText
+                android:id="@+id/edit_date"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:gravity="center_horizontal"
+                android:hint=" 1-01-2016"
+                android:inputType="datetime" />
+
+            <Button
+                android:id="@+id/button_select_date"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="เลือกวัน" />
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:padding="8dp">
+
+            <TextView
+                style="@style/Text.Body"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="เวลาที่โอนเงิน: " />
+
+            <EditText
+                android:id="@+id/edit_time"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:gravity="center_horizontal"
+                android:hint="12:30"
+                android:inputType="datetime" />
+
+            <Button
+                android:id="@+id/button_select_time"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="เลือกเวลา" />
+
+        </LinearLayout>
 
 
-</FrameLayout>
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:padding="8dp">
+
+            <TextView
+                style="@style/Text.Body"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="รหัสสั่งซื้อสินค้า: " />
+
+            <Spinner
+                android:id="@+id/spinner_order_id"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@color/gray"
+                android:padding="8dp"
+                tools:listitem="@android:layout/simple_spinner_item" />
+
+        </LinearLayout>
+
+        <Button
+            android:id="@+id/button_confirm"
+            android:layout_width="300dp"
+            android:layout_height="wrap_content"
+            android:layout_gravity="bottom|center_horizontal"
+            android:layout_marginTop="32dp"
+            android:background="@drawable/btn_green_ripple"
+            android:padding="16dp"
+            android:text="แจ้งการโอนเงิน"
+            android:textSize="18sp" />
+
+    </LinearLayout>
+
+
+</ScrollView>

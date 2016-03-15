@@ -21,4 +21,17 @@
         <item>@drawable/logout_icon</item>
     </string-array>
 
+    <string-array name="bank_name_array">
+        <item>ธนาคารกรุงเทพ(Bangkok Bank)</item>
+        <item>ธนาคารกรุงไทย(Krung Thai Bank)</item>
+        <item>ธนาคารกรุงศรีอยุธยา(Bank of Ayudhaya)</item>
+        <item>ธนาคารกสิกรไทย(Kasikron Bank)</item>
+        <item>ธนาคารซิติแบงค์(Citibank)</item>
+        <item>ธนาคารทหารไทย(Thai Military Bank)</item>
+        <item>ธนาคารไทยพาณิชย์(Siam Commercial Bank)</item>
+        <item>ธนาคารธนชาต(Thanachart Bank)</item>
+        <item>ธนาคารนครหลวงไทย(Siam City Bank)</item>
+        <item>ธนาคารยูโอบี(United Overseas Bank, Thailand)</item>
+        <item>ธนาคารสแตนดาร์ดชาร์เตอร์ดไทย(Standard Chartered Bank Thai)</item>
+    </string-array>
 </resources>

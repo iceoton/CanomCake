@@ -85,7 +85,11 @@ public class CartFragment extends Fragment {
         btnMakeOrder.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                sendMakeOrderToServer();
+                if(orderItems.size() != 0) {
+                    sendMakeOrderToServer();
+                } else {
+                    Toast.makeText(getActivity(), "ไม่มีสินค้าในรถเข็น โปรดเลือกซื้อสินค้า", Toast.LENGTH_LONG).show();
+                }
             }
         });
     }
@@ -203,12 +207,12 @@ public class CartFragment extends Fragment {
             public void onResponse(Call<MakeOrderResponse> call, Response<MakeOrderResponse> response) {
                 MakeOrderResponse makeOrderResponse = response.body();
                 if(makeOrderResponse.getSuccessValue() == 1){
-                    Toast.makeText(getActivity(), "สั่งซื้อสินค้าเรียบร้อยแล้ว", Toast.LENGTH_SHORT).show();
                     DatabaseDAO databaseDAO = new DatabaseDAO(getActivity());
                     databaseDAO.open();
                     databaseDAO.clearOrderItem();
                     databaseDAO.close();
                     getActivity().onBackPressed();
+                    Toast.makeText(getActivity(), "สั่งซื้อสินค้าเรียบร้อยแล้ว", Toast.LENGTH_LONG).show();
                 }
             }
 

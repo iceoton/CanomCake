@@ -94,7 +94,7 @@ public class LoginFragment extends Fragment {
                     Log.d("DEBUG", "id = " + user.getId());
                     AppPreference appPreference = new AppPreference(getActivity());
                     appPreference.saveUserId(user.getId());
-                    appPreference.saveUserName(user.getUsername());
+                    appPreference.saveUserName(user.getEmail());
                     appPreference.saveLoginStatus(true);
 
                     startMainActivity();

@@ -1,6 +1,7 @@
 package com.iceoton.canomcake.activity;
 
 import android.os.Bundle;
+import android.support.v4.app.Fragment;
 import android.support.v7.app.AppCompatActivity;
 
 import com.iceoton.canomcake.R;
@@ -19,5 +20,12 @@ public class LoginActivity extends AppCompatActivity {
                     .commit();
         }
 
+    }
+
+    public void placeFragmentToContrainer(Fragment fragment) {
+        getSupportFragmentManager().beginTransaction()
+                .replace(R.id.contentContainer, fragment)
+                .addToBackStack(null)
+                .commit();
     }
 }

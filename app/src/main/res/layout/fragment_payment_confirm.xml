@@ -157,7 +157,7 @@
             android:layout_height="wrap_content"
             android:layout_gravity="bottom|center_horizontal"
             android:layout_marginTop="32dp"
-            android:background="@drawable/btn_green_ripple"
+            android:background="@drawable/btn_green"
             android:padding="16dp"
             android:text="แจ้งการโอนเงิน"
             android:textSize="18sp" />

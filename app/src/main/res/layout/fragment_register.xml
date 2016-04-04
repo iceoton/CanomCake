@@ -207,11 +207,11 @@
             android:layout_height="wrap_content"
             android:layout_gravity="center_horizontal"
             android:layout_marginTop="16dp"
+            android:background="@drawable/btn_green"
             android:paddingLeft="32dp"
             android:paddingRight="32dp"
             android:text="สมัครสมาชิก"
-            android:textSize="18sp"
-            android:background="@drawable/btn_green_ripple"/>
+            android:textSize="18sp" />
 
     </LinearLayout>
 </ScrollView>

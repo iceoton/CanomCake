@@ -1,6 +1,9 @@
 package com.iceoton.canomcake.fragment;
 
 
+import android.app.AlertDialog;
+import android.app.ProgressDialog;
+import android.content.DialogInterface;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v7.app.ActionBar;
@@ -45,6 +48,7 @@ public class CartFragment extends Fragment {
     ArrayList<OrderItem> orderItems;
     ArrayList<Product> products;
     int loadItemCount;
+    ProgressDialog makeOrderProgressDialog;
 
     public static CartFragment newInstance(Bundle args) {
         CartFragment fragment = new CartFragment();
@@ -85,13 +89,20 @@ public class CartFragment extends Fragment {
         btnMakeOrder.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if(orderItems.size() != 0) {
+                if (orderItems.size() != 0) {
+                    makeOrderProgressDialog.show();
                     sendMakeOrderToServer();
                 } else {
                     Toast.makeText(getActivity(), "ไม่มีสินค้าในรถเข็น โปรดเลือกซื้อสินค้า", Toast.LENGTH_LONG).show();
                 }
             }
         });
+
+        makeOrderProgressDialog = new ProgressDialog(getActivity());
+        makeOrderProgressDialog.setCancelable(false);
+        makeOrderProgressDialog.setMessage("กำลังสั่งซื้อสินค้า...");
+        makeOrderProgressDialog.setProgressStyle(ProgressDialog.STYLE_SPINNER);
+
     }
 
     private void initialActionBar(Bundle savedInstanceState) {
@@ -101,8 +112,8 @@ public class CartFragment extends Fragment {
         mActionBar.setDisplayShowCustomEnabled(true);
         mActionBar.setDisplayShowTitleEnabled(false);
         mActionBar.setCustomView(customView);
-        Toolbar parent =(Toolbar) customView.getParent();
-        parent.setContentInsetsAbsolute(0,0);
+        Toolbar parent = (Toolbar) customView.getParent();
+        parent.setContentInsetsAbsolute(0, 0);
 
         ImageView imageTitle = (ImageView) customView.findViewById(R.id.image_title);
         imageTitle.setImageResource(R.drawable.arrow_back);
@@ -205,16 +216,36 @@ public class CartFragment extends Fragment {
         call.enqueue(new Callback<MakeOrderResponse>() {
             @Override
             public void onResponse(Call<MakeOrderResponse> call, Response<MakeOrderResponse> response) {
+                makeOrderProgressDialog.dismiss();
                 MakeOrderResponse makeOrderResponse = response.body();
-                if(makeOrderResponse.getSuccessValue() == 1){
+                if (makeOrderResponse.getSuccessValue() == 1) {
                     DatabaseDAO databaseDAO = new DatabaseDAO(getActivity());
                     databaseDAO.open();
                     databaseDAO.clearOrderItem();
                     databaseDAO.close();
-                    getActivity().onBackPressed();
-                    Toast.makeText(getActivity(), "สั่งซื้อสินค้าเรียบร้อยแล้ว", Toast.LENGTH_LONG).show();
-                } else{
+
+                    AlertDialog alertDialog = new AlertDialog.Builder(getActivity()).create();
+                    alertDialog.setMessage("สั่งซื้อสินค้าเรียบร้อยแล้ว");
+                    alertDialog.setCanceledOnTouchOutside(false);
+                    alertDialog.setButton(DialogInterface.BUTTON_POSITIVE, "ตกลง", new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+                            getActivity().onBackPressed();
+                        }
+                    });
+                    alertDialog.show();
+                } else {
                     Log.d("DEBUG", "Error in make order: " + makeOrderResponse.getErrorMessage());
+                    AlertDialog alertDialog = new AlertDialog.Builder(getActivity()).create();
+                    alertDialog.setMessage("ขออภัย ไม่สามารถสั่งซื้อสินค้าได้");
+                    alertDialog.setCanceledOnTouchOutside(false);
+                    alertDialog.setButton(DialogInterface.BUTTON_POSITIVE, "ตกลง", new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+
+                        }
+                    });
+                    alertDialog.show();
                 }
             }
 

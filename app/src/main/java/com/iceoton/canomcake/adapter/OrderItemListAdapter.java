@@ -13,6 +13,7 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
 import com.iceoton.canomcake.R;
@@ -81,7 +82,7 @@ public class OrderItemListAdapter extends BaseAdapter {
         Log.d("DEBUG", "get item " + position);
         final OrderItem orderItem = orderItems.get(position);
         // load product by product_code
-        Product product = products.get(position);
+        final Product product = products.get(position);
         if (product != null) {
             Log.d("DEBUG", "load image " + product.getNameThai() + "finish");
             String imageUrl = mContext.getResources().getString(R.string.api_url)
@@ -105,18 +106,28 @@ public class OrderItemListAdapter extends BaseAdapter {
 
                     final EditText editAmount = (EditText) dialog.findViewById(R.id.edit_amount);
                     editAmount.setText(String.valueOf(orderItem.getAmount()));
+                    TextView txtProductInstock = (TextView) dialog.findViewById(R.id.text_available);
+                    txtProductInstock.setText(String.valueOf(product.getAvailable()) + " " + product.getUnit());
                     Button btnOK = (Button) dialog.findViewById(R.id.btn_ok);
-
                     btnOK.setOnClickListener(new View.OnClickListener() {
                         @Override
                         public void onClick(View v) {
                             int newAmount = Integer.parseInt(editAmount.getText().toString());
-                            editAmount(orderItem.getId(), newAmount);
-                            orderItem.setAmount(newAmount);
-                            orderItems.set(position, orderItem);
-                            notifyDataSetChanged();
-                            cartFragment.updateFooterView();
-                            dialog.dismiss();
+                            if (newAmount < 1) {
+                                deleteThisOutOfCart(position);
+                                dialog.dismiss();
+                            } else if (newAmount > product.getAvailable()) {
+                                Toast.makeText(mContext,
+                                        "สินค้ามีจำนวนแค่ " + product.getAvailable() + " " + product.getUnit(),
+                                        Toast.LENGTH_SHORT).show();
+                            } else {
+                                editAmount(orderItem.getId(), newAmount);
+                                orderItem.setAmount(newAmount);
+                                orderItems.set(position, orderItem);
+                                notifyDataSetChanged();
+                                cartFragment.updateFooterView();
+                                dialog.dismiss();
+                            }
                         }
                     });
 
@@ -149,7 +160,6 @@ public class OrderItemListAdapter extends BaseAdapter {
     private void editAmount(int orderId, int newAmount) {
         ContentValues values = new ContentValues();
         values.put(OrderItemTable.Columns._AMOUNT, newAmount);
-
         DatabaseDAO databaseDAO = new DatabaseDAO(mContext);
         databaseDAO.open();
         databaseDAO.updateOrderItemByValues(orderId, values);

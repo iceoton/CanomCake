@@ -6,6 +6,7 @@
     android:orientation="vertical"
     android:padding="16dp">
 
+
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -14,14 +15,35 @@
         android:textColor="@color/primary_text"
         android:textSize="20sp" />
 
-    <EditText
-        android:id="@+id/edit_amount"
-        android:layout_width="100dp"
+    <LinearLayout
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="8dp"
-        android:gravity="center"
-        android:inputType="number"
-        android:textSize="18sp" />
+        android:orientation="horizontal">
+
+        <EditText
+            android:id="@+id/edit_amount"
+            android:layout_width="100dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            android:gravity="center"
+            android:inputType="number"
+            android:textSize="18sp" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:gravity="center_vertical"
+            android:text="/ "
+            android:textSize="18sp" />
+
+        <TextView
+            android:id="@+id/text_available"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:gravity="center_vertical"
+            android:text=""
+            android:textSize="18sp" />
+    </LinearLayout>
 
     <Button
         android:id="@+id/btn_ok"

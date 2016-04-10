@@ -1,6 +1,7 @@
 package com.iceoton.canomcake.model;
 
 import com.google.gson.annotations.Expose;
+import com.google.gson.annotations.SerializedName;
 
 public class Product {
     @Expose
@@ -19,6 +20,8 @@ public class Product {
     String unit;
     @Expose
     String image;
+    @SerializedName("available")
+    int available;
 
     public String getCode() {
         return code;
@@ -50,5 +53,9 @@ public class Product {
 
     public String getImageUrl() {
         return image;
+    }
+
+    public int getAvailable() {
+        return available;
     }
 }

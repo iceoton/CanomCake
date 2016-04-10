@@ -36,7 +36,7 @@ import retrofit2.converter.gson.GsonConverterFactory;
 
 public class ProductDetailFragment extends Fragment {
     ImageView ivPhoto;
-    TextView txtName, txtDetail, txtPrice, txtUnit;
+    TextView txtName, txtDetail, txtPrice, txtUnit, txtSoldOut;
     Button btnAddToCart;
     TextView titleBar;
     TextView txtCountInCart;
@@ -69,6 +69,7 @@ public class ProductDetailFragment extends Fragment {
         Bundle args = getArguments();
         String productCode = args.getString("product_code");
         ivPhoto = (ImageView) rootView.findViewById(R.id.image_photo);
+        txtSoldOut = (TextView) rootView.findViewById(R.id.text_sold_out);
         txtName = (TextView) rootView.findViewById(R.id.text_name);
         txtDetail = (TextView) rootView.findViewById(R.id.text_detail);
         txtPrice = (TextView) rootView.findViewById(R.id.text_price);
@@ -81,8 +82,8 @@ public class ProductDetailFragment extends Fragment {
         mActionBar.setDisplayShowCustomEnabled(true);
         mActionBar.setDisplayShowTitleEnabled(false);
         mActionBar.setCustomView(customView);
-        Toolbar parent =(Toolbar) customView.getParent();
-        parent.setContentInsetsAbsolute(0,0);
+        Toolbar parent = (Toolbar) customView.getParent();
+        parent.setContentInsetsAbsolute(0, 0);
 
         ImageView imageTitle = (ImageView) customView.findViewById(R.id.image_title);
         imageTitle.setImageResource(R.drawable.arrow_back);
@@ -125,6 +126,10 @@ public class ProductDetailFragment extends Fragment {
             public void onResponse(Call<GetProductByCodeResponse> call, Response<GetProductByCodeResponse> response) {
                 final Product product = response.body().getResult();
                 if (product != null) {
+                    if (product.getAvailable() < 1) {
+                        txtSoldOut.setVisibility(View.VISIBLE);
+                        btnAddToCart.setEnabled(false);
+                    }
                     txtName.setText(product.getNameThai());
                     titleBar.setText(product.getNameThai());
                     txtDetail.setText(product.getDetail());
@@ -150,7 +155,7 @@ public class ProductDetailFragment extends Fragment {
         });
     }
 
-    private void addProductToCart(Product product){
+    private void addProductToCart(Product product) {
         OrderItem orderItem = new OrderItem();
         orderItem.setProductCode(product.getCode());
         orderItem.setAmount(1);
@@ -167,8 +172,6 @@ public class ProductDetailFragment extends Fragment {
             getActivity().supportFinishAfterTransition();
         }
     }
-
-
 
 
 }

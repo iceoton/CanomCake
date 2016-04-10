@@ -23,6 +23,7 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
         ImageView ivPhoto;
         TextView txtName;
         TextView txtPrice;
+        TextView txtSoldOut;
 
         public RecyclerViewHolder(final View itemView, final OnViewHolderClickListener listener) {
             super(itemView);
@@ -35,6 +36,8 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
                     listener.onHolderClick(itemView, getLayoutPosition());
                 }
             });
+
+            txtSoldOut = (TextView) itemView.findViewById(R.id.text_sold_out);
         }
 
         public interface OnViewHolderClickListener {
@@ -76,6 +79,11 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
                 .into(holder.ivPhoto);
         holder.txtName.setText(product.getNameThai());
         holder.txtPrice.setText(product.getPrice() + " บาท/" + product.getUnit());
+        if(product.getAvailable() < 1){
+            holder.txtSoldOut.setVisibility(View.VISIBLE);
+        } else{
+            holder.txtSoldOut.setVisibility(View.INVISIBLE);
+        }
     }
 
     @Override

@@ -2,9 +2,17 @@
 <ripple xmlns:android="http://schemas.android.com/apk/res/android"
     android:color="@color/accent">
     <item>
-        <shape android:shape="rectangle">
-            <corners android:radius="8dp" />
-            <solid android:color="@color/primary" />
-        </shape>
+        <selector>
+            <item android:state_enabled="false">
+                <color android:color="@color/gray" />
+            </item>
+            <item>
+                <shape android:shape="rectangle">
+                    <corners android:radius="8dp" />
+                    <solid android:color="@color/primary" />
+                </shape>
+            </item>
+        </selector>
     </item>
+
 </ripple>

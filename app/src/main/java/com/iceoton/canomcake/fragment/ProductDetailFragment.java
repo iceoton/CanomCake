@@ -34,7 +34,7 @@ import retrofit2.converter.gson.GsonConverterFactory;
 
 public class ProductDetailFragment extends Fragment {
     ImageView ivPhoto;
-    TextView txtName, txtDetail, txtPrice, txtUnit, txtSoldOut;
+    TextView txtName, txtDetail, txtPrice, txtUnit, txtSoldOut, txtProductInStock;
     Button btnAddToCart;
     TextView titleBar;
     TextView txtCountInCart;
@@ -72,7 +72,9 @@ public class ProductDetailFragment extends Fragment {
         txtDetail = (TextView) rootView.findViewById(R.id.text_detail);
         txtPrice = (TextView) rootView.findViewById(R.id.text_price);
         txtUnit = (TextView) rootView.findViewById(R.id.text_unit);
+        txtProductInStock = (TextView) rootView.findViewById(R.id.text_available);
         btnAddToCart = (Button) rootView.findViewById(R.id.btn_add_to_cart);
+
 
         ActionBar mActionBar = ((ProductDetailActivity) getActivity()).getSupportActionBar();
         View customView = getLayoutInflater(savedInstanceState).inflate(R.layout.custom_actionbar, null);
@@ -133,6 +135,7 @@ public class ProductDetailFragment extends Fragment {
                     txtDetail.setText(product.getDetail());
                     txtPrice.setText(Double.toString(product.getPrice()));
                     txtUnit.setText("บาท/" + product.getUnit());
+                    txtProductInStock.setText(String.valueOf(product.getAvailable()) + " " + product.getUnit());
                     btnAddToCart.setOnClickListener(new View.OnClickListener() {
                         @Override
                         public void onClick(View v) {

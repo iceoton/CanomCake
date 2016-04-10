@@ -8,4 +8,5 @@
     <string name="order_status_delivering">กำลังจัดส่ง</string>
     <string name="order_status_delivered">จัดส่งแล้ว</string>
     <string name="text_order_detail">รายละเอียดการสั่งซื้อ</string>
+    <string name="click_forget_password">ลืมรหัสผ่าน<u>คลิกที่นี้</u></string>
 </resources>

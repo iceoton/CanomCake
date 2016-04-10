@@ -2,6 +2,7 @@ package com.iceoton.canomcake.service;
 
 import com.iceoton.canomcake.model.response.AddTransactionResponse;
 import com.iceoton.canomcake.model.response.EditCustomerResponse;
+import com.iceoton.canomcake.model.response.ForgetPasswordResponse;
 import com.iceoton.canomcake.model.response.GetAllCategoryResponse;
 import com.iceoton.canomcake.model.response.GetAllProductResponse;
 import com.iceoton.canomcake.model.response.GetCustomerResponse;
@@ -24,6 +25,10 @@ public interface CanomCakeService {
     @POST("customerApi.php")
     Call<UserLoginResponse> loginToServer(@Field("tag") String tag,
                                           @Field("data") String data);
+
+    @FormUrlEncoded
+    @POST("customerApi.php")
+    Call<ForgetPasswordResponse> sendForgetPassword(@Field("tag") String tag, @Field("data") String data);
 
     @FormUrlEncoded
     @POST("adminApi.php")

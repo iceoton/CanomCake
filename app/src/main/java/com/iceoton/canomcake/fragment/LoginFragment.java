@@ -10,6 +10,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.iceoton.canomcake.R;
@@ -32,6 +33,7 @@ import retrofit2.converter.gson.GsonConverterFactory;
 public class LoginFragment extends Fragment {
     EditText etUsername, etPassword;
     Button btnLogin, btnRegister;
+    TextView txtForgetPassword;
 
     public LoginFragment() {
         // Required empty public constructor
@@ -68,6 +70,16 @@ public class LoginFragment extends Fragment {
             }
         });
 
+        txtForgetPassword = (TextView) rootView.findViewById(R.id.text_forget_password);
+        txtForgetPassword.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                getActivity().getSupportFragmentManager().beginTransaction()
+                        .replace(R.id.contentContainer, ForgetPasswordFragment.newInstance(null))
+                        .addToBackStack(null)
+                        .commit();
+            }
+        });
 
     }
 

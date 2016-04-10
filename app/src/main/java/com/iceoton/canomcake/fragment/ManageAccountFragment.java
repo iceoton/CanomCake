@@ -16,6 +16,7 @@ import android.widget.EditText;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.iceoton.canomcake.R;
 import com.iceoton.canomcake.activity.CartActivity;
@@ -38,7 +39,7 @@ import retrofit2.converter.gson.GsonConverterFactory;
 
 public class ManageAccountFragment extends Fragment {
     TextView txtCountInCart;
-    EditText etName, etSurname, etMobile, etEmail, etAddress;
+    EditText etName, etSurname, etMobile, etEmail, etAddress, etPassword, etConfirmPassword;
     Button btnEdit;
 
     public ManageAccountFragment() {
@@ -92,13 +93,18 @@ public class ManageAccountFragment extends Fragment {
         etMobile = (EditText) rootView.findViewById(R.id.edit_mobile);
         etEmail = (EditText) rootView.findViewById(R.id.edit_email);
         etAddress = (EditText) rootView.findViewById(R.id.edit_address);
+        etPassword = (EditText) rootView.findViewById(R.id.edit_password);
+        etConfirmPassword = (EditText) rootView.findViewById(R.id.edit_confirm_password);
         btnEdit = (Button) rootView.findViewById(R.id.button_edit);
         btnEdit.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                updateUserInfo();
+                if(checkInputData()) {
+                    updateUserInfo();
+                }
             }
         });
+
 
         loadProfileInfoFromServer();
     }
@@ -154,6 +160,22 @@ public class ManageAccountFragment extends Fragment {
         etAddress.setText(user.getAddress());
     }
 
+    private boolean checkInputData(){
+        boolean flag = true;
+        if(etPassword.getText().toString().trim().equals("")){
+            Toast.makeText(getActivity(), "กรุณากรอกรหัสผ่าน", Toast.LENGTH_SHORT).show();
+            flag = false;
+        } else if(etName.getText().toString().trim().equals("") || etSurname.getText().toString().trim().equals("")){
+            Toast.makeText(getActivity(), "กรุณากรอกชื่อและนามสกุล", Toast.LENGTH_SHORT).show();
+            flag = false;
+        } else if(!etPassword.getText().toString().equals(etConfirmPassword.getText().toString())){
+            Toast.makeText(getActivity(), "รหัสผ่านกับยืนยันรหัสผ่านไม่ตรงกัน", Toast.LENGTH_SHORT).show();
+            flag = false;
+        }
+
+        return flag;
+    }
+
 
     private void updateUserInfo() {
         AppPreference appPreference = new AppPreference(getActivity());
@@ -164,6 +186,7 @@ public class ManageAccountFragment extends Fragment {
             data.put("fullname", fullName);
             data.put("phone_number", etMobile.getText().toString().trim());
             data.put("address", etAddress.getText().toString().trim());
+            data.put("password", etPassword.getText().toString());
         } catch (JSONException e) {
             e.printStackTrace();
         }

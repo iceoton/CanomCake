@@ -119,5 +119,15 @@ public class DatabaseDAO {
         return count;
     }
 
+    public int getAmountOfOrderItem(OrderItem orderItem){
+        int amount = 0;
+        OrderItem itemInDb = readOrderItemByProductCode(orderItem.getProductCode());
+        if(itemInDb != null){
+            amount = itemInDb.getAmount();
+        }
+
+        return amount;
+    }
+
 
 }

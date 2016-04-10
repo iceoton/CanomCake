@@ -18,8 +18,6 @@ import com.bumptech.glide.Glide;
 import com.iceoton.canomcake.R;
 import com.iceoton.canomcake.activity.CartActivity;
 import com.iceoton.canomcake.activity.ProductDetailActivity;
-import com.iceoton.canomcake.database.DatabaseDAO;
-import com.iceoton.canomcake.database.OrderItem;
 import com.iceoton.canomcake.model.Product;
 import com.iceoton.canomcake.model.response.GetProductByCodeResponse;
 import com.iceoton.canomcake.service.CanomCakeService;
@@ -156,20 +154,14 @@ public class ProductDetailFragment extends Fragment {
     }
 
     private void addProductToCart(Product product) {
-        OrderItem orderItem = new OrderItem();
-        orderItem.setProductCode(product.getCode());
-        orderItem.setAmount(1);
-        DatabaseDAO databaseDAO = new DatabaseDAO(getActivity());
-        databaseDAO.open();
-        databaseDAO.addOrderItem(orderItem);
-        // update cart
         CartManagement cartManagement = new CartManagement(getActivity());
-        cartManagement.loadCountInto(txtCountInCart);
-        //show dialog to checkout
-        databaseDAO.close();
-        // exit this fragment
-        if (!getActivity().getSupportFragmentManager().popBackStackImmediate()) {
-            getActivity().supportFinishAfterTransition();
+        boolean isSuccess = cartManagement.addProductToCart(product);
+        if(isSuccess) {
+            cartManagement.loadCountInto(txtCountInCart);
+            // exit this fragment
+            if (!getActivity().getSupportFragmentManager().popBackStackImmediate()) {
+                getActivity().supportFinishAfterTransition();
+            }
         }
     }
 

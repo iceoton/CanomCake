@@ -213,6 +213,8 @@ public class CartFragment extends Fragment {
                     databaseDAO.close();
                     getActivity().onBackPressed();
                     Toast.makeText(getActivity(), "สั่งซื้อสินค้าเรียบร้อยแล้ว", Toast.LENGTH_LONG).show();
+                } else{
+                    Log.d("DEBUG", "Error in make order: " + makeOrderResponse.getErrorMessage());
                 }
             }
 

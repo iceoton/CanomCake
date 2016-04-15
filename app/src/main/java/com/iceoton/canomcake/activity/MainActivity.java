@@ -109,10 +109,12 @@ public class MainActivity extends AppCompatActivity {
         public void onReceive(Context context, Intent intent) {
             SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(context);
             boolean sentToken = sharedPreferences.getBoolean(GcmRegisterService.SENT_TOKEN_TO_SERVER, false);
-            // TODO Do something here
+
             if(sentToken){
                 Log.d("DEBUG", "Sent token to server");
             }
+
+
         }
     };
 

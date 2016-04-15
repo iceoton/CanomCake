@@ -106,6 +106,7 @@ public class RegisterFragment extends Fragment {
     private void registerUserFromServer() {
         JSONObject data = new JSONObject();
         try {
+            data.put("gcm_regid","");
             data.put("email", etEmail.getText().toString().trim());
             data.put("password",etPassword.getText().toString().trim());
             String fullName = etName.getText().toString().trim() + "," + etSurname.getText().toString().trim();

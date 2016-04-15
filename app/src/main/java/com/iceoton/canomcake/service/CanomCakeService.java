@@ -12,6 +12,7 @@ import com.iceoton.canomcake.model.response.GetProductByCategoryResponse;
 import com.iceoton.canomcake.model.response.GetProductByCodeResponse;
 import com.iceoton.canomcake.model.response.MakeOrderResponse;
 import com.iceoton.canomcake.model.response.RegisterCustomerResponse;
+import com.iceoton.canomcake.model.response.UpdateGcmIdResponse;
 import com.iceoton.canomcake.model.response.UserLoginResponse;
 
 import retrofit2.Call;
@@ -59,6 +60,10 @@ public interface CanomCakeService {
     @FormUrlEncoded
     @POST("customerApi.php")
     Call<RegisterCustomerResponse> registerCustomer(@Field("tag")String tag, @Field("data")String data);
+
+    @FormUrlEncoded
+    @POST("customerApi.php")
+    Call<UpdateGcmIdResponse> updateGcmId(@Field("tag")String tag, @Field("data")String data);
 
     @FormUrlEncoded
     @POST("adminApi.php")

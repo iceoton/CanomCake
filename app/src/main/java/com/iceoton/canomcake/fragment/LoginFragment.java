@@ -14,7 +14,6 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.iceoton.canomcake.R;
-import com.iceoton.canomcake.activity.LoginActivity;
 import com.iceoton.canomcake.activity.MainActivity;
 import com.iceoton.canomcake.model.User;
 import com.iceoton.canomcake.model.response.UserLoginResponse;
@@ -65,8 +64,10 @@ public class LoginFragment extends Fragment {
         btnRegister.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                ((LoginActivity)getActivity()).
-                        placeFragmentToContrainer(RegisterFragment.newInstance(null));
+                getActivity().getSupportFragmentManager().beginTransaction()
+                        .replace(R.id.contentContainer, RegisterFragment.newInstance(null))
+                        .addToBackStack(null)
+                        .commit();
             }
         });
 

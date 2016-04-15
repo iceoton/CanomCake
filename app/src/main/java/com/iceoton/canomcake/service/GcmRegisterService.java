@@ -11,8 +11,19 @@ import com.google.android.gms.gcm.GcmPubSub;
 import com.google.android.gms.gcm.GoogleCloudMessaging;
 import com.google.android.gms.iid.InstanceID;
 import com.iceoton.canomcake.R;
+import com.iceoton.canomcake.model.response.UpdateGcmIdResponse;
+import com.iceoton.canomcake.util.AppPreference;
+
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import java.io.IOException;
+
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
+import retrofit2.Retrofit;
+import retrofit2.converter.gson.GsonConverterFactory;
 
 public class GcmRegisterService extends IntentService {
     private static final String TAG = "RegIntentService";
@@ -73,7 +84,39 @@ public class GcmRegisterService extends IntentService {
      */
     private void sendRegistrationToServer(String token) {
         // Add custom implementation, as needed.
-        // TODO: Implement this method to send any registration to your app's servers.
+        AppPreference appPreference = new AppPreference(this);
+        String customerId = appPreference.getUserId();
+        JSONObject data = new JSONObject();
+        try {
+            data.put("user_id", customerId);
+            data.put("gcm_regid", token);
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+
+        Retrofit retrofit = new Retrofit.Builder()
+                .baseUrl(getResources().getString(R.string.api_url))
+                .addConverterFactory(GsonConverterFactory.create())
+                .build();
+
+        CanomCakeService canomCakeService = retrofit.create(CanomCakeService.class);
+        Call call = canomCakeService.updateGcmId("updateGcmId", data.toString());
+        call.enqueue(new Callback<UpdateGcmIdResponse>() {
+            @Override
+            public void onResponse(Call<UpdateGcmIdResponse> call, Response<UpdateGcmIdResponse> response) {
+                UpdateGcmIdResponse updateGcmIdResponse = response.body();
+                if (updateGcmIdResponse.getSuccessValue() == 1) {
+                    Log.d("DEBUG","Update GCM token to server success");
+                } else {
+                    Log.d("DEBUG","Update GCM token error: " + response.body().getErrorMessage());
+                }
+            }
+
+            @Override
+            public void onFailure(Call<UpdateGcmIdResponse> call, Throwable t) {
+                Log.d("DEBUG", "Call CanomCake-API failure." + "\n" + t.getMessage());
+            }
+        });
     }
 
     /**

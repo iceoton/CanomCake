@@ -121,13 +121,16 @@ public class OrderDetailFragment extends Fragment {
         call.enqueue(new Callback<GetOrderByIdResponse>() {
             @Override
             public void onResponse(Call<GetOrderByIdResponse> call, Response<GetOrderByIdResponse> response) {
-                if (response.body().getResult().size() > 0) {
-                    OrderDetail orderDetail = response.body().getResult().get(0);
-                    OrderDetailListAdapter orderDetailListAdapter
-                            = new OrderDetailListAdapter(getActivity(), orderDetail.getOrderDetailItem());
-                    listViewDetail.setAdapter(orderDetailListAdapter);
-                    updateHeaderView(orderDetail);
-                    updateFooterView(orderDetail);
+                GetOrderByIdResponse getOrderByIdResponse = response.body();
+                if (getOrderByIdResponse != null) {
+                    if (getOrderByIdResponse.getResult()!= null && getOrderByIdResponse.getResult().size() > 0) {
+                        OrderDetail orderDetail = response.body().getResult().get(0);
+                        OrderDetailListAdapter orderDetailListAdapter
+                                = new OrderDetailListAdapter(getActivity(), orderDetail.getOrderDetailItem());
+                        listViewDetail.setAdapter(orderDetailListAdapter);
+                        updateHeaderView(orderDetail);
+                        updateFooterView(orderDetail);
+                    }
                 }
             }
 
@@ -143,26 +146,26 @@ public class OrderDetailFragment extends Fragment {
     private void updateHeaderView(OrderDetail orderDetail) {
         txtOrderId.setText("#" + String.valueOf(orderDetail.getId()));
         txtOrderTime.setText(orderDetail.getOrderTime());
-        if(orderDetail.getStatus().equalsIgnoreCase("DELIVERED")){
+        if (orderDetail.getStatus().equalsIgnoreCase("DELIVERED")) {
             txtStatus.setText(R.string.order_status_delivered);
             imageStatus.setImageResource(R.drawable.icon_delivered);
-        } else if(orderDetail.getStatus().equalsIgnoreCase("WAITING")){
+        } else if (orderDetail.getStatus().equalsIgnoreCase("WAITING")) {
             txtStatus.setText(R.string.order_status_waiting);
             imageStatus.setImageResource(R.drawable.icon_waiting);
-        } else if(orderDetail.getStatus().equalsIgnoreCase("DELIVERING")){
+        } else if (orderDetail.getStatus().equalsIgnoreCase("DELIVERING")) {
             txtStatus.setText(R.string.order_status_delivering);
             imageStatus.setImageResource(R.drawable.icon_delivering);
-        } else if(orderDetail.getStatus().equalsIgnoreCase("PAID")){
+        } else if (orderDetail.getStatus().equalsIgnoreCase("PAID")) {
             txtStatus.setText(R.string.order_status_paid);
             imageStatus.setImageResource(R.drawable.icon_packaging);
-        } else if(orderDetail.getStatus().equalsIgnoreCase("CANCELED")){
+        } else if (orderDetail.getStatus().equalsIgnoreCase("CANCELED")) {
             txtStatus.setText(R.string.order_status_canceled);
             imageStatus.setImageResource(R.drawable.icon_cancel);
         }
 
     }
 
-    private void updateFooterView(OrderDetail orderDetail){
+    private void updateFooterView(OrderDetail orderDetail) {
         txtTotalPrice.setText(String.valueOf(orderDetail.getTotalPrice()) + " บาท");
     }
 

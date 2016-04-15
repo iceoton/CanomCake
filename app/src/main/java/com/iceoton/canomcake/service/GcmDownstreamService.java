@@ -43,10 +43,7 @@ public class GcmDownstreamService extends GcmListenerService {
          * In some cases it may be useful to show a notification indicating to the user
          * that a message was received.
          */
-        Intent intent = new Intent(this, OrderDetailActivity.class);
-        intent.putExtra("order_id", Integer.parseInt(orderId));
-        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-        sendNotification(message, intent);
+        sendNotification(message, orderId);
     }
 
     /**
@@ -54,7 +51,10 @@ public class GcmDownstreamService extends GcmListenerService {
      *
      * @param message GCM message received.
      */
-    private void sendNotification(String message, Intent intent) {
+    private void sendNotification(String message, String orderId) {
+        Intent intent = new Intent(this, OrderDetailActivity.class);
+        intent.putExtra("order_id", Integer.parseInt(orderId));
+        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
         PendingIntent pendingIntent = PendingIntent.getActivity(this, 0 /* Request code */, intent,
                 PendingIntent.FLAG_ONE_SHOT);
 
@@ -70,6 +70,6 @@ public class GcmDownstreamService extends GcmListenerService {
         NotificationManager notificationManager =
                 (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
 
-        notificationManager.notify(0 /* ID of notification */, notificationBuilder.build());
+        notificationManager.notify(Integer.parseInt(orderId) /* ID of notification */, notificationBuilder.build());
     }
 }

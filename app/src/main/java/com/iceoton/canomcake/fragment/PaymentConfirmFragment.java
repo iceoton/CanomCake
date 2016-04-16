@@ -270,12 +270,16 @@ public class PaymentConfirmFragment extends Fragment {
             call.enqueue(new Callback<AddTransactionResponse>() {
                 @Override
                 public void onResponse(Call<AddTransactionResponse> call, Response<AddTransactionResponse> response) {
-                    showAlertDialog("แจ้งการชำระเงิน", "ทำการแจ้งการโอนเงินผ่านธนาคารเรียบร้อยแล้ว");
+                    if(response.body().getSuccessValue() == 1) {
+                        showAlertDialog("แจ้งการชำระเงิน", "ทำการแจ้งการโอนเงินผ่านธนาคารเรียบร้อยแล้ว");
+                    } else{
+                        showAlertDialog("ทำการแจ้งไม่สำเร็จ", "โปรดตรวจสอบข้อมูล และลองใหม่อีกครั้ง");
+                    }
                 }
 
                 @Override
                 public void onFailure(Call<AddTransactionResponse> call, Throwable t) {
-
+                    t.printStackTrace();
                 }
             });
 

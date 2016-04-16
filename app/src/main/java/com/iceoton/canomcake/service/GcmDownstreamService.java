@@ -13,6 +13,8 @@ import android.util.Log;
 import com.google.android.gms.gcm.GcmListenerService;
 import com.iceoton.canomcake.R;
 import com.iceoton.canomcake.activity.OrderDetailActivity;
+import com.iceoton.canomcake.database.DatabaseDAO;
+import com.iceoton.canomcake.database.NotificationItem;
 
 public class GcmDownstreamService extends GcmListenerService {
     private static final String TAG = "GcmListenerService";
@@ -38,7 +40,13 @@ public class GcmDownstreamService extends GcmListenerService {
          *     - Store message in local database.
          *     - Update UI.
          */
-
+        DatabaseDAO dao = new DatabaseDAO(this);
+        dao.open();
+        NotificationItem item = new NotificationItem();
+        item.setOrderId(orderId);
+        item.setMessage(message);
+        dao.addNotificationItem(item);
+        dao.close();
         /**
          * In some cases it may be useful to show a notification indicating to the user
          * that a message was received.

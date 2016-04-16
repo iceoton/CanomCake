@@ -49,14 +49,14 @@ public class DatabaseDAO {
         return orderItems;
     }
 
-    public OrderItem readOrderItemByProductCode(String productCode){
+    public OrderItem readOrderItemByProductCode(String productCode) {
         String sql = "SELECT * FROM " + OrderItemTable.TABLE_NAME
                 + " WHERE " + OrderItemTable.Columns._PRODUCT_CODE + "=?";
         String[] selectArgs = {productCode};
         Cursor cursor = database.rawQuery(sql, selectArgs);
 
         OrderItem orderItem = null;
-        if(cursor.getCount() > 0){
+        if (cursor.getCount() > 0) {
             cursor.moveToFirst();
             orderItem = new OrderItem();
             orderItem.fromCursor(cursor);
@@ -68,7 +68,7 @@ public class DatabaseDAO {
 
     public void addOrderItem(OrderItem orderItem) {
         OrderItem itemInDb = readOrderItemByProductCode(orderItem.getProductCode());
-        if (itemInDb != null){
+        if (itemInDb != null) {
             itemInDb.setAmount(itemInDb.getAmount() + 1);
             updateOrderItemByValues(itemInDb.getId(), itemInDb.toContentValues());
         } else {
@@ -103,7 +103,7 @@ public class DatabaseDAO {
         database.delete(OrderItemTable.TABLE_NAME, null, null);
     }
 
-    public int getNumberOfOrderItem(){
+    public int getNumberOfOrderItem() {
         int count = 0;
         String sql = "SELECT COUNT(*) FROM " + OrderItemTable.TABLE_NAME;
         Cursor cursor = database.rawQuery(sql, null);
@@ -119,15 +119,47 @@ public class DatabaseDAO {
         return count;
     }
 
-    public int getAmountOfOrderItem(OrderItem orderItem){
+    public int getAmountOfOrderItem(OrderItem orderItem) {
         int amount = 0;
         OrderItem itemInDb = readOrderItemByProductCode(orderItem.getProductCode());
-        if(itemInDb != null){
+        if (itemInDb != null) {
             amount = itemInDb.getAmount();
         }
 
         return amount;
     }
 
+    public void addNotificationItem(NotificationItem item) {
+        ContentValues values = item.toContentValues();
+        long insertIndex = database.insert(NotificationTable.TABLE_NAME, null, values);
+
+        if (insertIndex == -1) {
+            Log.d(TAG, "An error occurred on inserting notification item in to table.");
+        } else {
+            Log.d(TAG, "insert notification item successful.");
+        }
+
+    }
+
+    public ArrayList<NotificationItem> getAllNotificationItem() {
+        ArrayList<NotificationItem> items = new ArrayList<>();
+        String sql = "SELECT * FROM " + NotificationTable.TABLE_NAME + " ORDER BY id DESC;";
+        Cursor cursor = database.rawQuery(sql, null);
+
+        if (cursor.getCount() > 0) {
+           NotificationItem item;
+            cursor.moveToFirst();
+            while (!cursor.isAfterLast()) {
+                item = NotificationItem.newInstance(cursor);
+                items.add(item);
+                cursor.moveToNext();
+            }
+        }
+        cursor.close();
+
+        Log.d(TAG, "The number of notification item is " + items.size());
+
+        return items;
+    }
 
 }

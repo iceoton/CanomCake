@@ -8,7 +8,7 @@ import android.database.sqlite.SQLiteOpenHelper;
 public class DatabaseOpenHelper extends SQLiteOpenHelper{
     private static final String TAG = "DATABASE";
     private static final String DATABASE_NAME = "Canomcake.db";
-    private static final int DATABASE_VERSION = 1;
+    private static final int DATABASE_VERSION = 2;
 
     public DatabaseOpenHelper(Context context) {
         super(context, DATABASE_NAME, null, DATABASE_VERSION);
@@ -17,11 +17,13 @@ public class DatabaseOpenHelper extends SQLiteOpenHelper{
     @Override
     public void onCreate(SQLiteDatabase db) {
         OrderItemTable.creatTable(db);
+        NotificationTable.creatTable(db);
     }
 
     @Override
     public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
         db.execSQL("DROP TABLE IF EXISTS " + OrderItemTable.TABLE_NAME);
+        db.execSQL("DROP TABLE IF EXISTS " + NotificationTable.TABLE_NAME);
         onCreate(db);
     }
 }

@@ -1,6 +1,8 @@
 package com.iceoton.canomcake.fragment;
 
 
+import android.app.ProgressDialog;
+import android.content.DialogInterface;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
@@ -36,6 +38,7 @@ public class OrderDetailFragment extends Fragment {
     TextView txtOrderId, txtOrderTime, txtStatus, txtTotalPrice;
     ImageView imageStatus;
     int orderId;
+    ProgressDialog loading;
 
     public OrderDetailFragment() {
         // Required empty public constructor
@@ -75,6 +78,11 @@ public class OrderDetailFragment extends Fragment {
         Toolbar parent = (Toolbar) customView.getParent();
         parent.setContentInsetsAbsolute(0, 0);
 
+        loading = new ProgressDialog(getActivity());
+        loading.setCancelable(true);
+        loading.setMessage("กำลังโหลดข้อมูล");
+        loading.setProgressStyle(ProgressDialog.STYLE_SPINNER);
+
         ImageView imageTitle = (ImageView) customView.findViewById(R.id.image_title);
         imageTitle.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -104,6 +112,7 @@ public class OrderDetailFragment extends Fragment {
     }
 
     private void loadOrderByIdFromServer(int orderId) {
+        loading.show();
         JSONObject data = new JSONObject();
         try {
             data.put("id", orderId);
@@ -117,10 +126,20 @@ public class OrderDetailFragment extends Fragment {
                 .build();
 
         CanomCakeService canomCakeService = retrofit.create(CanomCakeService.class);
-        Call call = canomCakeService.loadOrderByOrderId("getOrderByOrderId", data.toString());
+        final Call call = canomCakeService.loadOrderByOrderId("getOrderByOrderId", data.toString());
+
+        loading.setOnCancelListener(new DialogInterface.OnCancelListener() {
+            @Override
+            public void onCancel(DialogInterface dialog) {
+                call.cancel();
+                getActivity().onBackPressed();
+            }
+        });
+
         call.enqueue(new Callback<GetOrderByIdResponse>() {
             @Override
             public void onResponse(Call<GetOrderByIdResponse> call, Response<GetOrderByIdResponse> response) {
+                loading.dismiss();
                 GetOrderByIdResponse getOrderByIdResponse = response.body();
                 if (getOrderByIdResponse != null) {
                     if (getOrderByIdResponse.getResult()!= null && getOrderByIdResponse.getResult().size() > 0) {

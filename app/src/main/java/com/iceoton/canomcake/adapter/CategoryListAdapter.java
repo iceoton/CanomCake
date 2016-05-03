@@ -11,6 +11,7 @@ import android.widget.TextView;
 import com.bumptech.glide.Glide;
 import com.iceoton.canomcake.R;
 import com.iceoton.canomcake.model.Category;
+import com.iceoton.canomcake.util.AppPreference;
 
 import java.util.ArrayList;
 
@@ -60,7 +61,8 @@ public class CategoryListAdapter extends BaseAdapter {
 
         viewHolder.textCategoryName.setText(categories.get(position).getNameThai());
 
-        String imageUrl = mContext.getResources().getString(R.string.api_url)
+        AppPreference preference = new AppPreference(mContext);
+        String imageUrl = preference.getApiUrl()
                 + categories.get(position).getImageUrl();
         Glide.with(mContext).load(imageUrl).into(viewHolder.imageViewCategory);
 

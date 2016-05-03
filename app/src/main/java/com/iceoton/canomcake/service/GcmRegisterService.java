@@ -94,8 +94,9 @@ public class GcmRegisterService extends IntentService {
             e.printStackTrace();
         }
 
+        AppPreference preference = new AppPreference(getApplicationContext());
         Retrofit retrofit = new Retrofit.Builder()
-                .baseUrl(getResources().getString(R.string.api_url))
+                .baseUrl(preference.getApiUrl())
                 .addConverterFactory(GsonConverterFactory.create())
                 .build();
 

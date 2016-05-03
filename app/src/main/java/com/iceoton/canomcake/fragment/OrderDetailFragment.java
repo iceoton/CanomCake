@@ -22,6 +22,7 @@ import com.iceoton.canomcake.adapter.OrderDetailListAdapter;
 import com.iceoton.canomcake.model.OrderDetail;
 import com.iceoton.canomcake.model.response.GetOrderByIdResponse;
 import com.iceoton.canomcake.service.CanomCakeService;
+import com.iceoton.canomcake.util.AppPreference;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -120,8 +121,9 @@ public class OrderDetailFragment extends Fragment {
             e.printStackTrace();
         }
 
+        AppPreference preference = new AppPreference(getActivity());
         Retrofit retrofit = new Retrofit.Builder()
-                .baseUrl(getContext().getResources().getString(R.string.api_url))
+                .baseUrl(preference.getApiUrl())
                 .addConverterFactory(GsonConverterFactory.create())
                 .build();
 

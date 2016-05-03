@@ -22,6 +22,7 @@ import com.iceoton.canomcake.database.OrderItem;
 import com.iceoton.canomcake.database.OrderItemTable;
 import com.iceoton.canomcake.fragment.CartFragment;
 import com.iceoton.canomcake.model.Product;
+import com.iceoton.canomcake.util.AppPreference;
 
 import java.util.ArrayList;
 
@@ -85,7 +86,8 @@ public class OrderItemListAdapter extends BaseAdapter {
         final Product product = products.get(position);
         if (product != null) {
             Log.d("DEBUG", "load image " + product.getNameThai() + "finish");
-            String imageUrl = mContext.getResources().getString(R.string.api_url)
+            AppPreference preference = new AppPreference(mContext);
+            String imageUrl = preference.getApiUrl()
                     + product.getImageUrl();
             Glide.with(mContext).load(imageUrl)
                     .placeholder(R.drawable.product_photo)

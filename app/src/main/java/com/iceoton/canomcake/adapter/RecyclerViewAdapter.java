@@ -14,6 +14,7 @@ import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.iceoton.canomcake.R;
 import com.iceoton.canomcake.activity.ProductDetailActivity;
 import com.iceoton.canomcake.model.Product;
+import com.iceoton.canomcake.util.AppPreference;
 
 import java.util.ArrayList;
 
@@ -71,7 +72,8 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
     @Override
     public void onBindViewHolder(RecyclerViewHolder holder, int position) {
         Product product = products.get(position);
-        String imageUrl = mContext.getResources().getString(R.string.api_url)
+        AppPreference preference = new AppPreference(mContext);
+        String imageUrl = preference.getApiUrl()
                 + product.getImageUrl();
         Glide.with(mContext)
                 .load(imageUrl)

@@ -163,8 +163,9 @@ public class PaymentConfirmFragment extends Fragment {
             e.printStackTrace();
         }
 
+        AppPreference preference = new AppPreference(getActivity());
         Retrofit retrofit = new Retrofit.Builder()
-                .baseUrl(getResources().getString(R.string.api_url))
+                .baseUrl(preference.getApiUrl())
                 .addConverterFactory(GsonConverterFactory.create())
                 .build();
         CanomCakeService canomCakeService = retrofit.create(CanomCakeService.class);
@@ -261,8 +262,9 @@ public class PaymentConfirmFragment extends Fragment {
             }
 
             Log.d("DEBUG", "JSON to confirm payment transfer = " + data.toString());
+            AppPreference preference = new AppPreference(getActivity());
             Retrofit retrofit = new Retrofit.Builder()
-                    .baseUrl(getResources().getString(R.string.api_url))
+                    .baseUrl(preference.getApiUrl())
                     .addConverterFactory(GsonConverterFactory.create())
                     .build();
             CanomCakeService canomCakeService = retrofit.create(CanomCakeService.class);

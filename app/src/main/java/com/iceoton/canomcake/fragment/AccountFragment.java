@@ -16,6 +16,7 @@ import android.widget.Toast;
 import com.iceoton.canomcake.R;
 import com.iceoton.canomcake.activity.LoginActivity;
 import com.iceoton.canomcake.activity.MainActivity;
+import com.iceoton.canomcake.activity.SetIpActivity;
 import com.iceoton.canomcake.adapter.AccountMenuListAdapter;
 import com.iceoton.canomcake.util.AppPreference;
 
@@ -76,6 +77,9 @@ public class AccountFragment extends Fragment {
             Intent intentToLogin = new Intent(getActivity(), LoginActivity.class);
             startActivity(intentToLogin);
             getActivity().finish();
+        } else if (id == R.drawable.ic_set_ip){
+            Intent intentToLogin = new Intent(getActivity(), SetIpActivity.class);
+            startActivity(intentToLogin);
         } else {
             Toast.makeText(getActivity(), "ยังไม่พร้อมใช้งาน", Toast.LENGTH_SHORT).show();
         }

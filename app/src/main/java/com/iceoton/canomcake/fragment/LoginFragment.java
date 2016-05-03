@@ -10,11 +10,13 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.iceoton.canomcake.R;
 import com.iceoton.canomcake.activity.MainActivity;
+import com.iceoton.canomcake.activity.SetIpActivity;
 import com.iceoton.canomcake.model.User;
 import com.iceoton.canomcake.model.response.UserLoginResponse;
 import com.iceoton.canomcake.service.CanomCakeService;
@@ -33,6 +35,7 @@ public class LoginFragment extends Fragment {
     EditText etUsername, etPassword;
     Button btnLogin, btnRegister;
     TextView txtForgetPassword;
+    ImageView imgLogo;
 
     public LoginFragment() {
         // Required empty public constructor
@@ -82,6 +85,15 @@ public class LoginFragment extends Fragment {
             }
         });
 
+        imgLogo = (ImageView) rootView.findViewById(R.id.image_logo);
+        imgLogo.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(getActivity(), SetIpActivity.class);
+                startActivity(intent);
+            }
+        });
+
     }
 
     private void loginToServer(String username, String password) {
@@ -93,8 +105,9 @@ public class LoginFragment extends Fragment {
             e.printStackTrace();
         }
 
+        AppPreference preference = new AppPreference(getActivity());
         Retrofit retrofit = new Retrofit.Builder()
-                .baseUrl(getResources().getString(R.string.api_url))
+                .baseUrl(preference.getApiUrl())
                 .addConverterFactory(GsonConverterFactory.create())
                 .build();
 
@@ -114,7 +127,7 @@ public class LoginFragment extends Fragment {
 
                     startMainActivity();
                 } else {
-                    Log.d("DEBUG","Login error: " + response.body().getErrorMessage());
+                    Log.d("DEBUG", "Login error: " + response.body().getErrorMessage());
                     Toast.makeText(getActivity(), "ไม่พบอีเมลนี้หรือรหัสผ่านไม่ถูกต้อง", Toast.LENGTH_SHORT).show();
                 }
             }

@@ -11,6 +11,7 @@
         <item>ประวัติการสั่งซื้อ</item>
         <item>จัดการบัญชีของฉัน</item>
         <item>ออกจากระบบ</item>
+        <item>ตั้งค่า URL ของ API</item>
     </string-array>
 
     <string-array name="account_menu_icon">
@@ -19,6 +20,7 @@
         <item>@drawable/history_icon</item>
         <item>@drawable/manage_acount_icon</item>
         <item>@drawable/logout_icon</item>
+        <item>@drawable/ic_set_ip</item>
     </string-array>
 
     <string-array name="bank_name_array">

@@ -17,6 +17,7 @@ import android.widget.Toast;
 import com.iceoton.canomcake.R;
 import com.iceoton.canomcake.model.response.ForgetPasswordResponse;
 import com.iceoton.canomcake.service.CanomCakeService;
+import com.iceoton.canomcake.util.AppPreference;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -84,8 +85,9 @@ public class ForgetPasswordFragment extends Fragment {
             e.printStackTrace();
         }
 
+        AppPreference preference = new AppPreference(getActivity());
         Retrofit retrofit = new Retrofit.Builder()
-                .baseUrl(getResources().getString(R.string.api_url))
+                .baseUrl(preference.getApiUrl())
                 .addConverterFactory(GsonConverterFactory.create())
                 .build();
 

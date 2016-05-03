@@ -50,4 +50,14 @@ public class AppPreference {
         return sharedPref.getString("appLanguage", "en");
     }
 
+    public void saveApiUrl(String url) {
+        SharedPreferences.Editor editor = sharedPref.edit();
+        editor.putString("api_url", url);
+        editor.apply();
+    }
+
+    public String getApiUrl() {
+        return sharedPref.getString("api_url", "http://192.168.1.1:8888/");
+    }
+
 }

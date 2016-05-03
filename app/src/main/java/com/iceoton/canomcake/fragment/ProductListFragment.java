@@ -23,6 +23,7 @@ import com.iceoton.canomcake.model.Product;
 import com.iceoton.canomcake.model.response.GetAllProductResponse;
 import com.iceoton.canomcake.model.response.GetProductByCategoryResponse;
 import com.iceoton.canomcake.service.CanomCakeService;
+import com.iceoton.canomcake.util.AppPreference;
 import com.iceoton.canomcake.util.CartManagement;
 
 import org.json.JSONException;
@@ -108,8 +109,9 @@ public class ProductListFragment extends Fragment {
             e.printStackTrace();
         }
 
+        AppPreference preference = new AppPreference(getActivity());
         Retrofit retrofit = new Retrofit.Builder()
-                .baseUrl(getResources().getString(R.string.api_url))
+                .baseUrl(preference.getApiUrl())
                 .addConverterFactory(GsonConverterFactory.create())
                 .build();
         CanomCakeService canomCakeService = retrofit.create(CanomCakeService.class);
@@ -136,8 +138,9 @@ public class ProductListFragment extends Fragment {
     }
 
     private void showAllProduct() {
+        AppPreference preference = new AppPreference(getActivity());
         Retrofit retrofit = new Retrofit.Builder()
-                .baseUrl(getResources().getString(R.string.api_url))
+                .baseUrl(preference.getApiUrl())
                 .addConverterFactory(GsonConverterFactory.create())
                 .build();
         CanomCakeService canomCakeService = retrofit.create(CanomCakeService.class);

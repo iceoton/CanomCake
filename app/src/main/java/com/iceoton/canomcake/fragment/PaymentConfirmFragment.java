@@ -54,6 +54,7 @@ public class PaymentConfirmFragment extends Fragment {
 
     Button btnSelectDate, btnSelectTime, btnConfirmTransfer;
     int mYear, mMonth, mDay, mHour, mMinute;
+    double selectedOrderPrice = 0.00f;
 
     ArrayList<String> waitingOrderIdTextList;
     ArrayAdapter<String> adapterOrderId;
@@ -193,7 +194,8 @@ public class PaymentConfirmFragment extends Fragment {
                     spinnerOrderId.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
                         @Override
                         public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                            txtOrderPrice.setText(String.valueOf(waitingOrder.get(position).getTotalPrice()));
+                            selectedOrderPrice = waitingOrder.get(position).getTotalPrice();
+                            txtOrderPrice.setText(String.valueOf(selectedOrderPrice));
                         }
 
                         @Override
@@ -259,49 +261,66 @@ public class PaymentConfirmFragment extends Fragment {
         } else if (etTransferTime.getText().toString().equals("")) {
             Toast.makeText(getActivity(), "โปรดเลือกเวลา", Toast.LENGTH_SHORT).show();
         } else {
-
             String bankName = (String) spinnerBankName.getSelectedItem();
             String orderId = ((String) spinnerOrderId.getSelectedItem()).substring(1);
             double amount = Double.valueOf(etMonty.getText().toString());
             String dateTime = etTransferTime.getText().toString() + " " + etTransferDate.getText().toString();
 
-            AppPreference appPreference = new AppPreference(getActivity());
-            JSONObject data = new JSONObject();
-            try {
-                data.put("customer_id", appPreference.getUserId());
-                data.put("order_id", orderId);
-                data.put("bank_name", bankName);
-                data.put("amount", amount);
-                data.put("date_time", dateTime);
-                data.put("bank_account", "");
-                data.put("description", "");
-            } catch (JSONException e) {
-                e.printStackTrace();
-            }
+            if (amount < selectedOrderPrice) {
+                AlertDialog alertDialog = new AlertDialog.Builder(getActivity()).create();
 
-            Log.d("DEBUG", "JSON to confirm payment transfer = " + data.toString());
-            AppPreference preference = new AppPreference(getActivity());
-            Retrofit retrofit = new Retrofit.Builder()
-                    .baseUrl(preference.getApiUrl())
-                    .addConverterFactory(GsonConverterFactory.create())
-                    .build();
-            CanomCakeService canomCakeService = retrofit.create(CanomCakeService.class);
-            Call call = canomCakeService.sendPaymentConfirm("addTransaction", data.toString());
-            call.enqueue(new Callback<AddTransactionResponse>() {
-                @Override
-                public void onResponse(Call<AddTransactionResponse> call, Response<AddTransactionResponse> response) {
-                    if (response.body().getSuccessValue() == 1) {
-                        showAlertDialog("แจ้งการชำระเงิน", "ทำการแจ้งการโอนเงินผ่านธนาคารเรียบร้อยแล้ว");
-                    } else {
-                        showAlertDialog("ทำการแจ้งไม่สำเร็จ", "โปรดตรวจสอบข้อมูล และลองใหม่อีกครั้ง");
+                alertDialog.setTitle("คุณทำรายการไม่ถูกต้อง");
+                alertDialog.setMessage("จำนวนเงินที่โอนมีมูลค่าน้อยกว่าราคาของรายการสั่งซื้อ#".concat(orderId));
+                alertDialog.setIcon(R.mipmap.ic_launcher);
+                alertDialog.setCanceledOnTouchOutside(false);
+                alertDialog.setButton(DialogInterface.BUTTON_POSITIVE, "ตกลง", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        dialog.cancel();
+
                     }
+                });
+                alertDialog.show();
+            } else {
+
+                AppPreference appPreference = new AppPreference(getActivity());
+                JSONObject data = new JSONObject();
+                try {
+                    data.put("customer_id", appPreference.getUserId());
+                    data.put("order_id", orderId);
+                    data.put("bank_name", bankName);
+                    data.put("amount", amount);
+                    data.put("date_time", dateTime);
+                    data.put("bank_account", "");
+                    data.put("description", "");
+                } catch (JSONException e) {
+                    e.printStackTrace();
                 }
 
-                @Override
-                public void onFailure(Call<AddTransactionResponse> call, Throwable t) {
-                    t.printStackTrace();
-                }
-            });
+                Log.d("DEBUG", "JSON to confirm payment transfer = " + data.toString());
+                AppPreference preference = new AppPreference(getActivity());
+                Retrofit retrofit = new Retrofit.Builder()
+                        .baseUrl(preference.getApiUrl())
+                        .addConverterFactory(GsonConverterFactory.create())
+                        .build();
+                CanomCakeService canomCakeService = retrofit.create(CanomCakeService.class);
+                Call call = canomCakeService.sendPaymentConfirm("addTransaction", data.toString());
+                call.enqueue(new Callback<AddTransactionResponse>() {
+                    @Override
+                    public void onResponse(Call<AddTransactionResponse> call, Response<AddTransactionResponse> response) {
+                        if (response.body().getSuccessValue() == 1) {
+                            showAlertDialog("แจ้งการชำระเงิน", "ทำการแจ้งการโอนเงินผ่านธนาคารเรียบร้อยแล้ว");
+                        } else {
+                            showAlertDialog("ทำการแจ้งไม่สำเร็จ", "โปรดตรวจสอบข้อมูล และลองใหม่อีกครั้ง");
+                        }
+                    }
+
+                    @Override
+                    public void onFailure(Call<AddTransactionResponse> call, Throwable t) {
+                        t.printStackTrace();
+                    }
+                });
+            }
 
         }
 

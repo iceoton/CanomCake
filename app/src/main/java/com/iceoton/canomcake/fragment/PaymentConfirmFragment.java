@@ -13,6 +13,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.DatePicker;
@@ -47,7 +48,7 @@ import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
 
 public class PaymentConfirmFragment extends Fragment {
-    TextView txtCountInCart;
+    TextView txtCountInCart, txtOrderPrice;
     Spinner spinnerBankName, spinnerOrderId;
     EditText etMonty, etTransferDate, etTransferTime;
 
@@ -72,6 +73,7 @@ public class PaymentConfirmFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View rootView = inflater.inflate(R.layout.fragment_payment_confirm, container, false);
+        // The default view does not show (show when customer have waiting order)
         rootView.setVisibility(View.INVISIBLE);
         initialView(rootView, savedInstanceState);
 
@@ -105,6 +107,7 @@ public class PaymentConfirmFragment extends Fragment {
     private void initialView(View rootView, Bundle savedInstanceState) {
         initialActionBar();
 
+        txtOrderPrice = (TextView) rootView.findViewById(R.id.text_order_price);
         spinnerOrderId = (Spinner) rootView.findViewById(R.id.spinner_order_id);
         waitingOrderIdTextList = new ArrayList<String>();
         adapterOrderId = new ArrayAdapter<String>(
@@ -178,14 +181,29 @@ public class PaymentConfirmFragment extends Fragment {
                 if (historyOrders != null) {
                     Log.d("DEBUG", "The Number of history order = " + historyOrders.size());
 
+                    final ArrayList<HistoryOrder> waitingOrder = new ArrayList<HistoryOrder>();
                     for (HistoryOrder order : historyOrders) {
                         if (order.getStatus().equalsIgnoreCase("WAITING")) {
                             waitingOrderIdTextList.add("#" + String.valueOf(order.getId()));
+                            waitingOrder.add(order);
                         }
                     }
                     Log.d("DEBUG", "The number of waiting order = " + waitingOrderIdTextList.size());
                     adapterOrderId.notifyDataSetChanged();
-                    rootView.setVisibility(View.VISIBLE);
+                    spinnerOrderId.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+                        @Override
+                        public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                            txtOrderPrice.setText(String.valueOf(waitingOrder.get(position).getTotalPrice()));
+                        }
+
+                        @Override
+                        public void onNothingSelected(AdapterView<?> parent) {
+
+                        }
+                    });
+                    if (waitingOrder.size() > 0) {
+                        rootView.setVisibility(View.VISIBLE);
+                    }
                 }
             }
 
@@ -235,11 +253,11 @@ public class PaymentConfirmFragment extends Fragment {
 
     private void sendOrderConfirmBankTranfer() {
         if (etMonty.getText().toString().trim().equals("")) {
-            Toast.makeText(getActivity(),"โปรดระบุจำนวนเงิน", Toast.LENGTH_SHORT).show();
+            Toast.makeText(getActivity(), "โปรดระบุจำนวนเงิน", Toast.LENGTH_SHORT).show();
         } else if (etTransferDate.getText().toString().equals("")) {
-            Toast.makeText(getActivity(),"โปรดเลือกวันที่", Toast.LENGTH_SHORT).show();
+            Toast.makeText(getActivity(), "โปรดเลือกวันที่", Toast.LENGTH_SHORT).show();
         } else if (etTransferTime.getText().toString().equals("")) {
-            Toast.makeText(getActivity(),"โปรดเลือกเวลา", Toast.LENGTH_SHORT).show();
+            Toast.makeText(getActivity(), "โปรดเลือกเวลา", Toast.LENGTH_SHORT).show();
         } else {
 
             String bankName = (String) spinnerBankName.getSelectedItem();
@@ -272,9 +290,9 @@ public class PaymentConfirmFragment extends Fragment {
             call.enqueue(new Callback<AddTransactionResponse>() {
                 @Override
                 public void onResponse(Call<AddTransactionResponse> call, Response<AddTransactionResponse> response) {
-                    if(response.body().getSuccessValue() == 1) {
+                    if (response.body().getSuccessValue() == 1) {
                         showAlertDialog("แจ้งการชำระเงิน", "ทำการแจ้งการโอนเงินผ่านธนาคารเรียบร้อยแล้ว");
-                    } else{
+                    } else {
                         showAlertDialog("ทำการแจ้งไม่สำเร็จ", "โปรดตรวจสอบข้อมูล และลองใหม่อีกครั้ง");
                     }
                 }

@@ -205,6 +205,8 @@ public class PaymentConfirmFragment extends Fragment {
                     });
                     if (waitingOrder.size() > 0) {
                         rootView.setVisibility(View.VISIBLE);
+                    } else {
+                        showAlertDialog("", "ไม่พบรายการสั่งซื้อที่ยังไม่ชำระเงิน");
                     }
                 }
             }

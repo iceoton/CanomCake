@@ -1,5 +1,5 @@
 <resources>
-    <!--<string name="api_url">http://192.168.1.1:8888/</string>-->
+    <string name="api_url">http://188.166.250.140/api/</string>
     <string name="app_name">Canom Cake</string>
     <string name="press_one_again">กดอีกครั้งเพื่อออกจากแอพ</string>
     <string name="order_status_waiting">รอดำเนินการ</string>

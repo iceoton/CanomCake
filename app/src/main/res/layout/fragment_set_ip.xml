@@ -16,7 +16,8 @@
         android:id="@+id/edit_url"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:inputType="textUri"/>
+        android:inputType="textUri"
+        android:text="@string/api_url"/>
 
     <Button
         android:id="@+id/btn_save"

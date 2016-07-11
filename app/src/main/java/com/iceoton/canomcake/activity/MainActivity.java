@@ -54,7 +54,7 @@ public class MainActivity extends AppCompatActivity {
         unregisterReceiver();
     }
 
-    public void placeFragmentToContrainer(Fragment fragment) {
+    public void placeFragmentToContainer(Fragment fragment) {
         getSupportFragmentManager().beginTransaction()
                 .replace(R.id.contentContainer, fragment)
                 .addToBackStack(null)

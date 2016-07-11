@@ -97,7 +97,7 @@ public class CategoryFragment extends Fragment {
         Bundle bundle = new Bundle();
         bundle.putInt("category_id", category.getId());
         bundle.putString("category_name", category.getNameThai());
-        ((MainActivity) getActivity()).placeFragmentToContrainer(ProductListFragment.newInstance(bundle));
+        ((MainActivity) getActivity()).placeFragmentToContainer(ProductListFragment.newInstance(bundle));
     }
 
 }

@@ -59,19 +59,19 @@ public class AccountFragment extends Fragment {
         if (id == R.drawable.history_icon) {
             Bundle args = new Bundle();
             args.putString("title", menuNameArray[position]);
-            ((MainActivity) getActivity()).placeFragmentToContrainer(HistoryFragment.newInstance(args));
+            ((MainActivity) getActivity()).placeFragmentToContainer(HistoryFragment.newInstance(args));
         } else if (id == R.drawable.notification_icon) {
             Bundle args = new Bundle();
             args.putString("title", menuNameArray[position]);
-            ((MainActivity) getActivity()).placeFragmentToContrainer(NotificationFragment.newInstance(args));
+            ((MainActivity) getActivity()).placeFragmentToContainer(NotificationFragment.newInstance(args));
         } else if (id == R.drawable.payment_confirm_icon) {
             Bundle args = new Bundle();
             args.putString("title", menuNameArray[position]);
-            ((MainActivity) getActivity()).placeFragmentToContrainer(PaymentConfirmFragment.newInstance(args));
+            ((MainActivity) getActivity()).placeFragmentToContainer(PaymentConfirmFragment.newInstance(args));
         } else if (id == R.drawable.manage_acount_icon) {
             Bundle args = new Bundle();
             args.putString("title", menuNameArray[position]);
-            ((MainActivity) getActivity()).placeFragmentToContrainer(ManageAccountFragment.newInstance(args));
+            ((MainActivity) getActivity()).placeFragmentToContainer(ManageAccountFragment.newInstance(args));
         } else if (id == R.drawable.logout_icon) {
             appPreference.saveLoginStatus(false);
             Intent intentToLogin = new Intent(getActivity(), LoginActivity.class);
